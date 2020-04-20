@@ -1,2 +1,2 @@
 # GuanHanGT.github.io
-Test Fido authenticator
+Test Fido authenticator on https://guanhangt.github.io/
