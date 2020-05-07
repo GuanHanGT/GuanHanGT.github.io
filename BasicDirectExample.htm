@@ -72,7 +72,7 @@
                     return navigator.credentials.create({ 'publicKey': makeCredChallenge })
                 })
                 .then((newCredentialInfo) => {
-                    newCredentialInfo = publicKeyCredentialToJSON(newCredentialInfo)
+                
                     console.log('SUCCESS', newCredentialInfo)
                     console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
                     let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
@@ -82,7 +82,7 @@
                     console.log('CredID: ', bufToHex(authData.credID));
                     console.log('AAGUID: ', bufToHex(authData.aaguid));
                     console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
-                
+                    newCredentialInfo = publicKeyCredentialToJSON(newCredentialInfo);
                     return makeCredentialResponse(newCredentialInfo)
                 })
                 .then((serverResponse) => {
