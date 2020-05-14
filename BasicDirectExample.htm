@@ -102,7 +102,15 @@
 
             let username    = this.username.value;
             let password    = this.password.value;
+            let allowid    = this.allowid.value;
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
 
+            
+            var check = 0;
+            if(username =='PKI-id'){
+                check = 1;
+            }
             loginPassword({username, password})
                 .then((serverResponse) => {
                     if(serverResponse.status !== 'startFIDOAuthentication')
@@ -112,6 +120,14 @@
                 })
                 .then((getAssertionChallenge) => {
                     getAssertionChallenge = preformatGetAssertReq(getAssertionChallenge);
+                    console.log("publick key",getAssertionChallenge);
+                    if(check==1){
+                        console.log("Yes");
+                        console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
+                        getAssertionChallenge.allowCredentials[0].id = Uint8Array.from(allowid, c=>c.charCodeAt(0));
+                        console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
+
+                    }
                     return navigator.credentials.get({ 'publicKey': getAssertionChallenge })
                 })
                 .then((newCredentialInfo) => {
