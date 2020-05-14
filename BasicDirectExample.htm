@@ -38,7 +38,7 @@
                         <form id="login" onsubmit="return false">
                             <input type="text" name="username" placeholder="Username"><br>
                             <input type="password" name="password" placeholder="Password"><br>
-                            <input type="text" name="allowid" placeholder="Credential ID"><br>
+                            <input type="text" name="allowid" placeholder="Input "><br>
                             <button class="btn btn-primary" action="submit">Login</button>
                         </form>
                     </div><!-- .card-body --> 
@@ -57,8 +57,8 @@
             let username    = this.username.value;
             let password    = this.password.value;
             let displayName = this.displayName.value;
-            console.log('username', username);
-            console.log('displayName', displayName);
+            //console.log('username', username);
+           // console.log('displayName', displayName);
             
             registerPassword({username, password, displayName})
                 .then((serverResponse) => {
@@ -69,20 +69,20 @@
                 })
                 .then((makeCredChallenge) => {
                     makeCredChallenge = preformatMakeCredReq(makeCredChallenge);
-                    console.log('makeCredChallenge', makeCredChallenge);
+                   // console.log('makeCredChallenge', makeCredChallenge);
                     return navigator.credentials.create({ 'publicKey': makeCredChallenge })
                 })
                 .then((newCredentialInfo) => {
                 
-                    console.log('SUCCESS', newCredentialInfo)
-                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                   // console.log('SUCCESS', newCredentialInfo)
+                   // console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
                     let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
-                    console.log('AttestationObject: ', attestationObject)
+                   // console.log('AttestationObject: ', attestationObject)
                     let authData = parseAuthData(attestationObject.authData);
-                    console.log('AuthData: ', authData);
-                    console.log('CredID: ', bufToHex(authData.credID));
-                    console.log('AAGUID: ', bufToHex(authData.aaguid));
-                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                   // console.log('AuthData: ', authData);
+                console.log('DATA: ', bufToHex(authData.credID));
+                  //  console.log('AAGUID: ', bufToHex(authData.aaguid));
+                  //  console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
                     newCredentialInfo = publicKeyCredentialToJSON(newCredentialInfo);
                     return makeCredentialResponse(newCredentialInfo)
                 })
@@ -123,17 +123,19 @@
                     getAssertionChallenge = preformatGetAssertReq(getAssertionChallenge);
                     console.log("publick key",getAssertionChallenge);
                     if(check==1){
-                        console.log("Yes");
-                        console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
+                       // console.log("Yes");
+                       // console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
                         getAssertionChallenge.allowCredentials[0].id = Uint8Array.from(allowid, c=>c.charCodeAt(0));
-                        console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
+                        //console.log("allowCredentials",getAssertionChallenge.allowCredentials[0].id);
 
                     }
                     return navigator.credentials.get({ 'publicKey': getAssertionChallenge })
                 })
                 .then((newCredentialInfo) => {
                     newCredentialInfo = publicKeyCredentialToJSON(newCredentialInfo)
-
+                    console.log("Sign",newCredentialInfo.response.signature);
+                    //var sign = Uint8Array.from(window.atob(newCredentialInfo.response.signature), c=>c.charCodeAt(0))
+                    //console.log('Sign: ', bufToHex(sign));
                     return getAssertionResponse(newCredentialInfo)
                 })
                 .then((serverResponse) => {
