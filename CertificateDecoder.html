@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html lang="en" class="wf-robotodisplayswap-n4-inactive wf-inactive">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script type="text/javascript" async="" src="./library/analytics.js"></script>
+	<script src="./library/webfont.js" async=""></script>
+	<script>var _dev = false</script>
+	<script async="" src="./library/js"></script>
+	
+	<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-3776848-14');</script>
+	<script>	(function(d){var wf=d.createElement('script'), s=d.scripts[0];wf.src='https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';wf.async=true;s.parentNode.insertBefore(wf, s);})(document); </script>
+	<script src="./library/jquery.min.js"></script>
+	<script src="./library/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script async="" src="./library/bundle.js"></script>
+	<script>
+
+		function getUrlVars() {
+			var vars = {};
+			var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+				vars[key] = value;
+			});
+			return vars;
+		}
+
+		function getUrlParam(parameter, defaultvalue){
+			var urlparameter = defaultvalue;
+			if(window.location.href.indexOf(parameter) > -1){
+				urlparameter = getUrlVars()[parameter];
+				}
+			return urlparameter;
+		}
+
+
+		$(document).ready(function(){ 
+
+			var btnDecode = document.getElementById('decode');
+			btnDecode.style.visibility = 'hidden';
+
+			var ctrlErr = document.getElementById('upload-error');
+			ctrlErr.style.visibility = 'hidden';
+			
+			var ctrlCert = document.getElementById('certificate');
+			ctrlCert.style.visibility = 'hidden';
+
+			console.log( "URL ... \n", window.location.href )
+
+			var cert = decodeURI(getUrlParam( 'value', 'empty' ))
+			cert = cert.substring(1, cert.length)
+			cert = cert.substring(0, cert.length-1)
+			console.log( "Param.. \n", cert )
+
+			$('#certificate').text( cert )
+
+			window.setTimeout(function() {
+				console.log( "Timeout ... trigger decode");
+				$("#decode .btn").click();
+			}, 1000);
+			
+			$("#decode .btn").click(function(){
+			console.log('OK Click decode' )
+			});
+				
+		});   
+	</script>
+</head>
+	
+<body dir="ltr"><div class="container mt-2"><div id="form" class="mt-2 mb-2"><div class="container"><div class="row"><div class="col"><div class="card"><div class="card-body">
+	<form>
+		<div class="form-group">
+			<textarea class="form-control certificate" id="certificate" rows="8" style="white-space: pre" required="" autofocus="" ></textarea>
+
+		<div id="upload-error" class="alert alert-danger alert-dismissible mt-1" style="display: none;" role="alert">
+		<small id="upload-error-message"></small>
+		<button type="button" class="close" aria-label="Close" onclick="$(&#39;#upload-error&#39;).hide()">
+			<span aria-hidden="true">×</span></button></div></div>
+		<div class="text-center">
+			<div id="decode">
+				<button id="decode" type="submit" class="btn btn-primary btn-lg">Decode</button>
+			</div>
+			<div id="error" class="alert alert-danger alert-dismissible mt-2" style="display: none;" role="alert">
+				<span id="error-message"></span> 
+				<button type="button" class="close" aria-label="Close" onclick="$(&#39;#error&#39;).hide()">
+				<span aria-hidden="true">×</span></button>
+			</div>
+		</div>
+
+		<div id="cert-info-warn" class="alert alert-warning mt-3">
+			<small>Certificate information will never leave your browser. Decoding happens using client-side JavaScript.</small>
+		</div>
+	</form>
+	
+	<div id="results" class="d-none mt-2"></div></div></div></div></div></div></div></div>
+	
+	<br>
+</body></html>
