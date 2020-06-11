@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MakeCredential Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Ensure use of most common Unicode characters -->
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <!-- Considered an "experimental" feature -->
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css" />
+    <!-- Spectre.css icons are used -->
+    <link rel="stylesheet"href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css"> 
+
+    <script src="./MakeCredential Example_files/cbor.js"></script>
+    <script src="./MakeCredential Example_files/helpers.js"></script>
+    <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'UA-3776848-14');</script>
+	<script>	(function(d){var wf=d.createElement('script'), s=d.scripts[0];wf.src='https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';wf.async=true;s.parentNode.insertBefore(wf, s);})(document); </script>
+	<script src="./library/jquery.min.js"></script>
+	<script src="./library/bootstrap.min.js" integrity="sha256-Tz+u7EaSlLYQ9sqCqhzCszaP1WYRsxxVHC7iJP6ttBE=" crossorigin="anonymous"></script>
+	<script async="" src="./library/bundle.js"></script>
+	<script>
+
+
+		function displayCert( strCertificate ) { 
+    
+            $('#certificate').text( strCertificate )
+            window.setTimeout(function() {
+				console.log( "Timeout ... trigger decode");
+				$("#decode .btn").click();
+			}, 100);
+
+	
+        }
+
+		$(document).ready(function(){ 
+
+            var btnDecode = document.getElementById('decode');
+			btnDecode.style.visibility = 'hidden';
+
+			var ctrlErr = document.getElementById('upload-error');
+			ctrlErr.style.visibility = 'hidden';
+			
+			var ctrlCert = document.getElementById('certificate');
+			ctrlCert.style.visibility = 'hidden';
+        });
+
+</script>	
+</head>
+<body>
+    <table style="height: 492px; width: 888px;">
+    <tbody>	    
+    <tr>
+<td style="width: 496px;"><img src="http://www.go-trust.com/download/idem_key/idem_key_on_pc.png" alt="Idem Key " width="477" height="519" />&nbsp;&nbsp;</td>
+<td style="width: 329px;">
+	<h1 style="text-align: center;">GoTrust Idem Key Plus</h1>
+	<h3 style="text-align: center;">A demo of operating PKI over FIDO2</h3>
+	<table style="height: 160px;" border="1" width="395"><tbody>
+	<tr><td style="width: 385px;">
+		<p style="text-align: center;">Operate Certificate by CKA_LABEL</p>
+		
+		<p><form style="text-align: center;" id="use-label" onsubmit="return false">
+			<input type="text" name="ckaLabel" placeholder="CKA_LABEL" style="width: 342px; height:41px" ><p>				
+		</form></p>
+		<form style="text-align: center;" id="search-ckalabel" onsubmit="return false">
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Read Certificate</button>		
+		</form>
+		<p><form style="text-align: center;" id="sign-byckalabel" onsubmit="return false">	
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Test Sign</button>
+		</form></p>	
+	</td></tr>
+	<tr><td style="width: 385px;">
+		<p style="text-align: center;">Operate Certificate by Index (1~8)</p>
+		<p><form style="text-align:center" id="use-index" onsubmit="return false">
+			<input type="number" name="certIndex" placeholder="index" style="width: 342px; height:41px">  
+		</form></p>
+		<form style="text-align: center;" id="find-index" onsubmit="return false">
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;">Read Certificate</button>
+		</form>
+	    
+		<p>
+		<form style="text-align: center;" id="sign-byindex" onsubmit="return false">		 
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;">Test Sign</button>
+	    	</form></p>
+	</td></tr>
+	</tbody></table>
+</td>
+</tr>				
+</tbody>
+</table>	    
+ 	
+    <div>	
+	<textarea style="width:100%;height:150px;" id="show-sign">
+	 
+	</textarea>
+    </div>		    
+	
+  <!--  Laurence -->
+    <div class="container mt-2"><div id="form" class="mt-2 mb-2"><div class="container"><div class="row"><div class="col"><div class="card"><div class="card-body">
+    <div id="results" class="d-none mt-2"></div>
+    <form>
+		<div class="form-group">
+			<textarea class="form-control certificate" id="certificate" rows="8" style="white-space: pre" required="" autofocus="" ></textarea>
+
+		<div id="upload-error" class="alert alert-danger alert-dismissible mt-1" style="display: none;" role="alert">
+		<small id="upload-error-message"></small>
+		<button type="button" class="close" aria-label="Close" onclick="$(&#39;#upload-error&#39;).hide()">
+			<span aria-hidden="true">×</span></button></div></div>
+		<div class="text-center">
+			<div id="decode">
+				<button id="decode" type="submit" class="btn btn-primary btn-lg">Decode</button>
+			</div>
+			<div id="error" class="alert alert-danger alert-dismissible mt-2" style="display: none;" role="alert">
+				<span id="error-message"></span> 
+				<button type="button" class="close" aria-label="Close" onclick="$(&#39;#error&#39;).hide()">
+				<span aria-hidden="true">×</span></button>
+			</div>
+		</div>
+
+		<div id="cert-info-warn" class="alert alert-warning mt-3">
+			<small>Certificate information will never leave your browser. Decoding happens using client-side JavaScript.</small>
+		</div>
+	</form>
+	
+	</div></div></div></div></div></div></div>
+	
+    <script>
+  
+    var GTheader = 'R29UcnVzdC1JZGVtLVBLSQ=='; // GoTrust-Idem-PKI
+    // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
+    var signData = 'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY='; 
+    document.getElementById('find-index').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pki_buffer = [];
+            let certIndex    = document.getElementById('use-index').certIndex.value;
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+            var command_bufer =  new Uint8Array(3);
+            window.crypto.getRandomValues(command_bufer);
+            command_bufer[0] = 0x81;
+            command_bufer[1] = 0x01;
+            command_bufer[2] = certIndex;
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c=>c.charCodeAt(0));
+            var pki_buffer = new Uint8Array(20);
+            pki_buffer.set( new Uint8Array(gtheaderbuffer), 0);
+	    pki_buffer.set( new Uint8Array(command_bufer), gtheaderbuffer.byteLength);
+           
+            console.log(pki_buffer);
+            
+            var publicKey1 = {
+                'challenge': challenge,
+
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+                
+                'user': {
+                    'id': pki_buffer,
+                    'name': 'Get Cert By Index',
+                    'displayName': 'Get Cert By Index'
+                },
+                
+                "authenticatorSelection": {
+                    "requireResidentKey": false,
+		    "authenticatorAttachment": "cross-platform"	
+                    
+                },
+                'attestation': "none",
+                'pubKeyCredParams': [
+                    { 'type': 'public-key', 'alg': -7  },
+                    { 'type': 'public-key', 'alg': -257 }
+                ]
+            }
+            console.log('List publicKey1', publicKey1)
+            
+            
+            navigator.credentials.create({ 'publicKey': publicKey1 })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject)
+		    let authData = parseAuthData(attestationObject.authData);
+                    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    alert('Test DONE!!!')
+		    const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
+     		    var strCert="-----BEGIN CERTIFICATE-----\n"
+                                + btoa(String.fromCharCode.apply(null, sliced))
+                                + "\n-----END CERTIFICATE-----"
+
+                    console.log('Certificatie : \n',strCert)
+
+                
+
+                    displayCert( strCert )
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })
+       
+	    document.getElementById('sign-byindex').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pki_buffer = [];
+            let certIndex    = document.getElementById('use-index').certIndex.value;
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c=>c.charCodeAt(0));		    
+            var command_bufer =  new Uint8Array(3);
+            command_bufer[0] = 0x81;
+            command_bufer[1] = 0x01;
+            command_bufer[2] = certIndex;
+	    var algbuffer =  new Uint8Array(3);	    
+            algbuffer[0] = 0x83;
+            algbuffer[1] = 0x01;
+            algbuffer[2] = 0x02;  //RSA2048-sha1:1,  RSA2048-sha256:2, 
+
+		    
+            var signDatabuffer = Uint8Array.from(window.atob(signData), c=>c.charCodeAt(0));
+            var signDataHeader =  new Uint8Array(3);	 
+	          signDataHeader[0] = 0x84;
+            signDataHeader[1] = 0x00;
+            signDataHeader[2] = signDatabuffer.length;    
+		    
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength+signDataHeader.byteLength+signDatabuffer.byteLength);
+            pki_buffer.set( new Uint8Array(gtheaderbuffer),0);
+	    pki_buffer.set( new Uint8Array(command_bufer), gtheaderbuffer.byteLength);
+	    pki_buffer.set( new Uint8Array(algbuffer),  gtheaderbuffer.byteLength+command_bufer.byteLength);
+            pki_buffer.set( new Uint8Array(signDataHeader),  gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength);
+	    pki_buffer.set( new Uint8Array(signDatabuffer),  gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength+signDataHeader.byteLength);
+            console.log(pki_buffer);
+            
+            var getAssertionChallenge = {
+                'challenge': challenge,    
+            }
+	    var idList = [{
+		    id: pki_buffer,
+		     transports: ["usb", "nfc", "ble"],
+		    type: "public-key"
+            }];
+		    
+	    getAssertionChallenge.allowCredentials= idList;
+            console.log('List getAssertionChallenge', getAssertionChallenge)
+            
+            
+            navigator.credentials.get({ 'publicKey': getAssertionChallenge })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo);
+		    console.log("Sign",newCredentialInfo.response.signature);
+		    
+                    const sign = newCredentialInfo.response.signature;
+                    var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+		    
+		    document.getElementById('show-sign').value = "Data:"+"\n"+signData+"\n"+"sign:"+"\n"+btoa(str);
+                
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })
+	    
+        document.getElementById('search-ckalabel').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pki_buffer = [];
+            let ckaLabel    = document.getElementById('use-label').ckaLabel.value;
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+            var command_bufer =  new Uint8Array(16);
+            window.crypto.getRandomValues(command_bufer);
+            command_bufer[0] = 0x80;
+            command_bufer[1] = 0x01;
+            command_bufer[2] = ckaLabel.length;
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c=>c.charCodeAt(0));
+            var pki_buffer = new Uint8Array(32);
+            pki_buffer.set( new Uint8Array(gtheaderbuffer), 0);
+	        pki_buffer.set( new Uint8Array(command_bufer), gtheaderbuffer.byteLength);
+           
+            console.log(pki_buffer);
+            
+            var publicKey1 = {
+                'challenge': challenge,
+
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+                
+                'user': {
+                    'id': pki_buffer,
+                    'name': ckaLabel,
+                    'displayName': 'Get Cert By Label'
+                },
+               
+                "authenticatorSelection": {
+                    "requireResidentKey": false,
+	            authenticatorAttachment: "cross-platform"		
+                    
+                },
+                'attestation': "none",
+                'pubKeyCredParams': [
+                    { 'type': 'public-key', 'alg': -7  },
+                    { 'type': 'public-key', 'alg': -257 }
+                ]
+            }
+            console.log('List publicKey1', publicKey1)
+            
+            
+            navigator.credentials.create({ 'publicKey': publicKey1 })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject);
+		    let authData = parseAuthData(attestationObject.authData);
+		    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    alert('Test DONE!!!')
+                    
+		    var strCert="-----BEGIN CERTIFICATE-----\n"
+                                + btoa(String.fromCharCode.apply(null, authData.credID))
+                                + "\n-----END CERTIFICATE-----"
+
+                    console.log('Certificatie : \n',strCert)
+
+                
+
+                    displayCert( strCert )
+		    
+                   
+    
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })
+	    
+	 document.getElementById('sign-byckalabel').addEventListener('submit', function(event) {
+            event.preventDefault();
+            var pki_buffer = [];
+            let ckaLabel    = document.getElementById('use-label').ckaLabel.value;
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c=>c.charCodeAt(0));
+            var enc = new TextEncoder();		 
+            var command_bufer =  new Uint8Array( ckaLabel.length+2);
+            command_bufer[0] = 0x82;
+            command_bufer[1] = ckaLabel.length;
+            command_bufer.set(new Uint8Array(enc.encode(ckaLabel)),2);	
+		 
+	    var algbuffer =  new Uint8Array(3);	    
+            algbuffer[0] = 0x83;
+            algbuffer[1] = 0x01;
+            algbuffer[2] = 0x02;  //RSA2048-sha1:1,  RSA2048-sha256:2, 
+
+		    
+            var signDatabuffer = Uint8Array.from(window.atob(signData), c=>c.charCodeAt(0));
+            var signDataHeader =  new Uint8Array(3);	 
+	          signDataHeader[0] = 0x84;
+            signDataHeader[1] = 0x00; //Data Len1
+            signDataHeader[2] = signDatabuffer.length;//Data Len2    
+		    
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength+signDataHeader.byteLength+signDatabuffer.byteLength);
+            pki_buffer.set( new Uint8Array(gtheaderbuffer),0);
+	    pki_buffer.set( new Uint8Array(command_bufer), gtheaderbuffer.byteLength);
+	    pki_buffer.set( new Uint8Array(algbuffer),  gtheaderbuffer.byteLength+command_bufer.byteLength);
+            pki_buffer.set( new Uint8Array(signDataHeader),  gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength);
+	    pki_buffer.set( new Uint8Array(signDatabuffer),  gtheaderbuffer.byteLength+command_bufer.byteLength+algbuffer.byteLength+signDataHeader.byteLength);
+            console.log(pki_buffer);
+            
+            var getAssertionChallenge = {
+                'challenge': challenge,    
+            }
+	    var idList = [{
+		    id: pki_buffer,
+		     transports: ["usb", "nfc", "ble"],
+		    type: "public-key"
+            }];
+		    
+	    getAssertionChallenge.allowCredentials= idList;
+            console.log('List getAssertionChallenge', getAssertionChallenge)
+            
+            
+            navigator.credentials.get({ 'publicKey': getAssertionChallenge })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo)
+		    console.log("Sign",newCredentialInfo.response.signature)
+                    const sign = newCredentialInfo.response.signature;
+		    var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+		    
+		    document.getElementById('show-sign').value = "Data:"+"\n"+signData+"\n"+"sign:"+"\n"+btoa(str);
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })    
+    </script>	
+
+</body></html>
