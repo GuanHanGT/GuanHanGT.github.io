@@ -140,7 +140,7 @@
                 .then((newCredentialInfo) => {
                     newCredentialInfo = publicKeyCredentialToJSON(newCredentialInfo)
                     console.log("Sign",newCredentialInfo.response.signature);
-                    document.getElementById('show-sign').value = "Data:"+"\n"+newCredentialInfo.response.signature+"\n";
+                    document.getElementById('show-data').value = "Data:"+"\n"+newCredentialInfo.response.signature+"\n";
                     //var sign = Uint8Array.from(window.atob(newCredentialInfo.response.signature), c=>c.charCodeAt(0))
                     //console.log('Sign: ', bufToHex(sign));
                     return getAssertionResponse(newCredentialInfo)
