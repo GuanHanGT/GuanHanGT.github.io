@@ -95,6 +95,14 @@
 	<table style="height: 160px;" border="1" width="395"><tbody>
 		<tr><td style="width: 385px;">
 		<p style="text-align: center;">Fido2</p>
+		  
+		  <label for="userVerification" class="attachment">User Verification</label>
+		  <select id="userVerification" class="attachment">
+		    <option value="none">None</option>
+		    <option value="required">Required</option>
+		    <option value="preferred">Preferred</option>
+		    <option value="discouraged">Discouraged</option>
+		  </select>
 		<form style="text-align: center;" id="do-makecredential" onsubmit="return false">
 			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Make Credential</button>		
 		</form>
@@ -522,7 +530,8 @@
             var challenge = new Uint8Array(32);
 	    var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
             var id = Uint8Array.from(window.atob(userID), c=>c.charCodeAt(0))
-            
+            var uv = document.getElementById('userVerification').value;
+		
 	    var publicKey1 = {
                 'challenge': challenge,
 
@@ -537,7 +546,7 @@
                 },
                
                 "authenticatorSelection": {
-                     "userVerification": "discouraged",
+                     "userVerification": uv,
                     "requireResidentKey": false,
                     "authenticatorAttachment": "cross-platform"	
                     
@@ -569,7 +578,7 @@
 		    
 		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+
 			                                         "fmt: "+attestationObject.fmt+"\n"+
-		    						 "counter: "+authData.counter;	
+		    						 "counter: "+ bufToHex(authData.counter);	
 		              
 		    
                    
