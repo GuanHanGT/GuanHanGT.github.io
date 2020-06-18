@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MakeCredential Example</title>
+    <title>TestPKI Example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Ensure use of most common Unicode characters -->
     <meta charset="utf-8">
@@ -193,6 +193,10 @@
                     console.log('AAGUID: ', bufToHex(authData.aaguid));
                     console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
                     alert('Test DONE!!!')
+		    //fido2-u2f 
+		  
+		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+attestationObject+"\n";
+		    
 		    const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
      		    var strCert="-----BEGIN CERTIFICATE-----\n"
                                 + btoa(String.fromCharCode.apply(null, sliced))
