@@ -578,7 +578,10 @@
 		    
 		    document.getElementById('show-sign').value = "MakeCredential=> AttestationObject:"+"\n"+
 			                                         "fmt: "+attestationObject.fmt+"\n"+
-		    						 "counter: "+ authData.counter;	
+		    						 "counter: "+ authData.counter+"\n"+
+			                                         "CredID: "+ bufToHex(authData.credID)+"\n"+
+		                                                 "x5c: "+ btoa(String.fromCharCode.apply(null, attestationObject.attStmt.x5c[0]))+"\n"
+		               ;	
 		              
 		    
                    
