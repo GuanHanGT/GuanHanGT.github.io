@@ -195,7 +195,7 @@
                     alert('Test DONE!!!')
 		    //fido2-u2f 
 		  
-		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+attestationObject+"\n";
+		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+attestationObject.fmt+"\n";
 		    
 		    const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
      		    var strCert="-----BEGIN CERTIFICATE-----\n"
