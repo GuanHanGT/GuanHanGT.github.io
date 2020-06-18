@@ -89,6 +89,20 @@
 	</td></tr>
 	</tbody></table>
 </td>
+<td style="width: 329px;">
+	<h1 style="text-align: center;"></h1>
+	<h3 style="text-align: center;">Normal operation</h3>
+	<table style="height: 160px;" border="1" width="395"><tbody>
+		<tr><td style="width: 385px;">
+		<p style="text-align: center;">Fido2</p>
+		<form style="text-align: center;" id="do-makecredential" onsubmit="return false">
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Make Credential</button>		
+		</form>
+		<p><form style="text-align: center;" id="do-getassertion" onsubmit="return false">	
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >GetAssertion</button>
+		</form></p>	
+	</td></tr>
+</tbody></table>		
 </tr>				
 </tbody>
 </table>	    
@@ -193,9 +207,7 @@
                     console.log('AAGUID: ', bufToHex(authData.aaguid));
                     console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
                     alert('Test DONE!!!')
-		    //fido2-u2f 
-		  
-		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+attestationObject.fmt+"\n";
+		 
 		    
 		    const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
      		    var strCert="-----BEGIN CERTIFICATE-----\n"
@@ -499,7 +511,77 @@
                     alert(error)
                     console.log('FAIL', error)
                 })
+        })   
+	
+	document.getElementById('do-makecredential').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge); 
+            var challenge = new Uint8Array(32);
+	    var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
+            var id = Uint8Array.from(window.atob(userID), c=>c.charCodeAt(0))
+            
+	    var publicKey1 = {
+                'challenge': challenge,
+
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+                
+                'user': {
+                    'id': id,
+                    'name': 'alice@example.com',
+                    'displayName': 'Alice von Wunderland'
+                },
+               
+                "authenticatorSelection": {
+                     "userVerification": "discouraged",
+                    "requireResidentKey": false,
+                    "authenticatorAttachment": "cross-platform"	
+                    
+                },
+                'attestation': "direct",
+                'pubKeyCredParams': [
+                    { 'type': 'public-key', 'alg': -7  },
+                    { 'type': 'public-key', 'alg': -257 }
+                ]
+            }
+            console.log('List publicKey1', publicKey1)
+            
+            
+            navigator.credentials.create({ 'publicKey': publicKey1 })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject);
+		    let authData = parseAuthData(attestationObject.authData);
+		    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    alert('Test DONE!!!');
+
+   		
+		    
+		    document.getElementById('show-sign').value = "AttestationObject:"+"\n"+
+			                                         "fmt: "+attestationObject.fmt+"\n"+
+		    						 "counter: "+authData.counter;	
+		              
+		    
+                   
+    
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
         })    
+	     
     </script>	
 
 </body></html>
