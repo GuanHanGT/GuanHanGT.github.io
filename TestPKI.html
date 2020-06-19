@@ -103,23 +103,28 @@
 		    <option value="preferred">Preferred</option>
 		    <option value="discouraged">Discouraged</option>
 		  </select>
+		<br>	
 		<form style="text-align: center;" id="do-makecredential" onsubmit="return false">
 			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Make Credential</button>		
 		</form>
 		<p><form style="text-align: center;" id="do-getassertion" onsubmit="return false">	
-			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >GetAssertion</button>
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Test Sign</button>
 		</form></p>	
 	</td></tr>
 
 	<tr><td style="width: 385px;">
 		<p style="text-align: center;">Android PKI Test</p>
-		  
+		
+		<p><form style="text-align: center;" id="android-pin" onsubmit="return false">
+			<input type="text" name="pin" placeholder="User PIN" style="width: 342px; height:41px" >			
+		</form></p>	
+
 		<p><form style="text-align: center;" id="android-label" onsubmit="return false">
-			<input type="text" name="ckaLabel" placeholder="CKA_LABEL" style="width: 342px; height:41px" ><p>				
-		</form>
+			<input type="text" name="ckaLabel" placeholder="CKA_LABEL" style="width: 342px; height:41px" >			
+		</form></p>	
 		
 		<p><form style="text-align: center;" id="android-getassertion" onsubmit="return false">	
-			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >GetAssertion</button>
+			<button class="btn btn-primary" action="submit" style="width: 162px; height:34px;background-color: #008CBA;" >Test Sign</button>
 		</form></p>	
 	</td></tr>
 </tbody></table>		
