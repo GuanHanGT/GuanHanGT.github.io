@@ -5,8 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
 
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Web Crypto API ECDH generateKey/deriveBits and perform AES encryption and decryption, jwk format ecdh ">
-    <meta name="keywords" content="Web Crypto API ecdh named curved generate keys sign verify the message,  ecdh generate keys, ecdh keys export to jwk, web crypto deriveKeys ,web crypto live tutorial, windo.crypto javascript examples, Web Cryptography API">
+    <meta name="description"
+        content="Web Crypto API ECDH generateKey/deriveBits and perform AES encryption and decryption, jwk format ecdh ">
+    <meta name="keywords"
+        content="Web Crypto API ecdh named curved generate keys sign verify the message,  ecdh generate keys, ecdh keys export to jwk, web crypto deriveKeys ,web crypto live tutorial, windo.crypto javascript examples, Web Cryptography API">
     <meta name="language" content="en">
     <title>Web Crypto API ECDH generateKey/deriveBits and perform AES encryption and decryption</title>
     <script src="./Web_Crypto_API_ECDH_files/bootstrap.bundle.min.js"></script>
@@ -18,12 +20,12 @@
         var privateKey;
         var publicKey;
         var externalECPublicKey;
- 
+
 
         var iv = new Uint8Array(16);
         console.log("iv .... ", iv)
 
-         
+
 
         function asciiToUint8Array(str) {
             var chars = [];
@@ -43,20 +45,21 @@
 
             var plainText = document.getElementById("plainText").value;
             var curve = document.getElementById("curve").value;
-            
+
             iv = crypto.getRandomValues(new Uint8Array(16));
 
 
-        
+            var ex_ecX = document.getElementById("ecpublickey_x").value;
+            var ex_ecY = document.getElementById("ecpublickey_y").value;
 
 
-            var externalECPublicKeyX = window.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_x").value));
-            var externalECPublicKeyY = window.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_y").value));
+            var externalECPublicKeyX = window.btoa(hexStringToUint8Array(ex_ecX));
+            var externalECPublicKeyY = window.btoa(hexStringToUint8Array(ex_ecY));
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
             window.crypto.subtle.importKey(
-                "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
                 {   //this is an example jwk key, other key types are Uint8Array objects
                     kty: "EC",
                     crv: "P-256",
@@ -88,13 +91,13 @@
                     true, //whether the key is extractable (i.e. can be used in exportKey)
                     ["deriveKey", "deriveBits"] //can be any combination of "deriveKey" and "deriveBits"
                 )
-                .then(function(key) {
+                .then(function (key) {
 
                     publicKey = key.publicKey;
                     privateKey = key.privateKey;
 
 
-                    // For Demo Purpos Only Exported in JWK format
+                    //                    For Demo Purpos Only Exported in JWK format
                     // window.crypto.subtle.exportKey("jwk", key.publicKey).then(
                     //     function(keydata) {
                     //         publicKeyhold = keydata;
@@ -103,9 +106,19 @@
                     //     }
                     // );
 
+                    // window.crypto.subtle.exportKey("raw", key.publicKey).then(
+                    //     function (keydata) {
+
+                    //         publicKeyhold = keydata;
+                    //         console.log("key.publicKey",  bufToHex(keydata));
+                            
+                    //     }
+                    // );
+
                     window.crypto.subtle.exportKey("jwk", key.privateKey).then(
-                        function(keydata) {
+                        function (keydata) {
                             privateKeyhold = keydata;
+                           
                             privateKeyJson = JSON.stringify(privateKeyhold);
                             document.getElementById("ecdhprivate").value = privateKeyJson;
                         }
@@ -114,7 +127,8 @@
                     window.crypto.subtle.deriveKey({
                                 name: "ECDH",
                                 namedCurve: curve, //can be "P-256", "P-384", or "P-521"
-                                public: externalECPublicKey, //an ECDH public key from generateKey or importKey
+                                //public: externalECPublicKey, //an ECDH public key from generateKey or importKey
+                                public: publicKey, //an ECDH public key from generateKey or importKey
                             },
                             privateKey, //your ECDH private key from generateKey or importKey
                             { //the key type you want to create based on the derived bits
@@ -125,19 +139,19 @@
                             true, //whether the derived key is extractable (i.e. can be used in exportKey)
                             ["encrypt", "decrypt"] //limited to the options in that algorithm's importKey
                         )
-                        .then(function(keydata) {
+                        .then(function (keydata) {
                             //returns the exported key data
 
                             // For Demo Purpos Only Exported in JWK format
                             window.crypto.subtle.exportKey("jwk", keydata).then(
-                                function(keydata) {
+                                function (keydata) {
                                     dKey = keydata;
                                     //document.getElementById("deriveKey").value = dKey.k
                                     document.getElementById("deriveKeyUsage").value = JSON.stringify(dKey)
                                 }
                             );
                         })
-                        .catch(function(err) {
+                        .catch(function (err) {
                             console.error(err);
                         });
 
@@ -149,17 +163,17 @@
                             privateKey, //from generateKey or importKey above
                             256 //the number of bits you want to derive
                         )
-                        .then(function(bits) {
+                        .then(function (bits) {
                             //returns an ArrayBuffer containing the signature
                             document.getElementById("cipherText").value = bytesToHexString(bits);
                         })
-                        .catch(function(err) {
+                        .catch(function (err) {
                             console.error(err);
                         });
 
 
                 })
-                .catch(function(err) {
+                .catch(function (err) {
                     console.error(err);
                 });
         }
@@ -193,14 +207,14 @@
                 ext: ext1,
                 k: k1,
                 kty: kty1
-            }, "aes-cbc", false, ["encrypt"]).then(function(key) {
+            }, "aes-cbc", false, ["encrypt"]).then(function (key) {
                 return crypto.subtle.encrypt({
                     name: "aes-cbc",
                     iv: iv,
                     //                    counter: iv,
                     //                    length: 128
                 }, key, asciiToUint8Array(plainText));
-            }, failAndLog).then(function(cipherText) {
+            }, failAndLog).then(function (cipherText) {
                 document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
             }, failAndLog);
         }
@@ -233,14 +247,14 @@
                 ext: ext1,
                 k: k1,
                 kty: kty1
-            }, "aes-cbc", false, ["decrypt"]).then(function(key) {
+            }, "aes-cbc", false, ["decrypt"]).then(function (key) {
                 return crypto.subtle.decrypt({
                     name: "aes-cbc",
                     iv: iv,
                     //                    counter: iv,
                     //                    length: 128
                 }, key, hexStringToUint8Array(plainText));
-            }, failAndLog).then(function(cipherText) {
+            }, failAndLog).then(function (cipherText) {
                 alert(bytesToASCIIString(cipherText));
             }, failAndLog);
         }
@@ -294,58 +308,65 @@
             window.crypto.getRandomValues(challenge);
             var challenge = new Uint8Array(32);
             var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
-            var id = Uint8Array.from(window.atob(userID), c=>c.charCodeAt(0))
+            var id = Uint8Array.from(window.atob(userID), c => c.charCodeAt(0))
 
             var publicKey1 = {
-            'challenge': challenge,
+                'challenge': challenge,
 
-            'rp': {
-            'name': 'GoTrustID Inc.',
-            },
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
 
-            'user': {
-            'id': id,
-            'name': 'alice@example.com',
-            'displayName': 'Alice von Wunderland'
-            },
+                'user': {
+                    'id': id,
+                    'name': 'alice@example.com',
+                    'displayName': 'Alice von Wunderland'
+                },
 
-            "authenticatorSelection": {
-                "userVerification": "discouraged",
-                "requireResidentKey": false,
-                "authenticatorAttachment": "cross-platform"
+                "authenticatorSelection": {
+                    "userVerification": "discouraged",
+                    "requireResidentKey": false,
+                    "authenticatorAttachment": "cross-platform"
 
-            },
-            'attestation': "direct",
-            'pubKeyCredParams': [
-            { 'type': 'public-key', 'alg': -7 },
-            { 'type': 'public-key', 'alg': -257 }
-            ]
+                },
+                'attestation': "direct",
+                'pubKeyCredParams': [{
+                        'type': 'public-key',
+                        'alg': -7
+                    },
+                    {
+                        'type': 'public-key',
+                        'alg': -257
+                    }
+                ]
             }
             console.log('List publicKey1', publicKey1);
 
 
-            navigator.credentials.create({ 'publicKey': publicKey1 })
+            navigator.credentials.create({
+                    'publicKey': publicKey1
+                })
                 .then((newCredentialInfo) => {
 
-                console.log('SUCCESS', newCredentialInfo)
-                console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
-                let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
-                console.log('AttestationObject: ', attestationObject);
-                let authData = parseAuthData(attestationObject.authData);
-                console.log('AuthData: ', authData);
-                console.log('CredID: ', bufToHex(authData.credID));
-                console.log('AAGUID: ', bufToHex(authData.aaguid));
-                console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
-                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
-    
-                console.log('X point: ', bufToHex(Object.values(publicKEy)[3]));
-                console.log('Y point: ', bufToHex(Object.values(publicKEy)[4]));
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject);
+                    let authData = parseAuthData(attestationObject.authData);
+                    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
 
-                document.getElementById("ecpublickey_x").value =  bufToHex(Object.values(publicKEy)[3]);
-                document.getElementById("ecpublickey_y").value =  bufToHex(Object.values(publicKEy)[4]);
-                
-                alert('Test DONE!!!');
-            })
+                    console.log('X point: ', bufToHex(Object.values(publicKEy)[3]));
+                    console.log('Y point: ', bufToHex(Object.values(publicKEy)[4]));
+
+                    document.getElementById("ecpublickey_x").value = bufToHex(Object.values(publicKEy)[3]);
+                    document.getElementById("ecpublickey_y").value = bufToHex(Object.values(publicKEy)[4]);
+
+                    alert('Test DONE!!!');
+                })
         }
     </script>
 
@@ -360,10 +381,12 @@
         <hr>
         <h2 class="mt-4">Get EC public Key from Idem Key Plus</h2>
         <div>
-            <br> ECDH Key public      
+            <br> ECDH Key public
             <p><button type="button" class="btn btn-primary" onclick="getECPublicKey()">Get ECKey </button></p>
-            <p><input class="form-control" type="text" size="100" name="ecpublickey_x" id="ecpublickey_x" readonly="true"> </p>
-            <p> <input class="form-control" type="text" size="100" name="ecpublickey_y" id="ecpublickey_y" readonly="true"></p>
+            <p><input class="form-control" type="text" size="100" name="ecpublickey_x" id="ecpublickey_x"
+                    readonly="true"> </p>
+            <p> <input class="form-control" type="text" size="100" name="ecpublickey_y" id="ecpublickey_y"
+                    readonly="true"></p>
         </div>
         <hr>
         <h2 class="mt-4">
@@ -372,7 +395,8 @@
             <select class="form-control" name="curve" id="curve">
                 <option value="P-256">P-256</option>
             </select>
-            <p><button type="button" class="btn btn-primary" onclick="ECDH_DeriveKey_DeriveBits()">ECDH DeriveKey and Derive Bits </button></p>
+            <p><button type="button" class="btn btn-primary" onclick="ECDH_DeriveKey_DeriveBits()">ECDH DeriveKey and
+                    Derive Bits </button></p>
         </div>
         <div> ECDH External Public Key (JWK) :
             <textarea class="form-control" name="ecdhpublic" id="ecdhpublic" cols="10" rows="2"> </textarea>
@@ -388,8 +412,10 @@
             <input class="form-control" type="text" name="plainText" value="Hello 8gwifi" id="plainText"> Output
             <input class="form-control" type="text" size="100" name="cipherTextGCM" id="cipherTextGCM">
             <br>
-            <button type="button" class="btn btn-primary" onclick="ECDH_AES_CTR_Encrypt()">Encrypt ECDH-AES-CBC </button>
-            <button type="button" class="btn btn-primary" onclick="ECDH_AES_CTR_Decrypt()">Decrypt ECDH-AES-CBC </button>
+            <button type="button" class="btn btn-primary" onclick="ECDH_AES_CTR_Encrypt()">Encrypt ECDH-AES-CBC
+            </button>
+            <button type="button" class="btn btn-primary" onclick="ECDH_AES_CTR_Decrypt()">Decrypt ECDH-AES-CBC
+            </button>
         </div>
         <hr>
     </div>
