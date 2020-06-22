@@ -53,8 +53,8 @@
 
 
 
-            var externalECPublicKeyX = base64EncodeURL(String.fromCharCode.apply(null, new Uint8Array(bEx_ecX)));
-            var externalECPublicKeyY = base64EncodeURL(String.fromCharCode.apply(null, new Uint8Array(bEx_ecY)));
+            var externalECPublicKeyX = base64EncodeURL(bEx_ecX);
+            var externalECPublicKeyY = base64EncodeURL(bEx_ecY);
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
