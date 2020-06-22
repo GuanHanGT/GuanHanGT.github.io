@@ -17,11 +17,18 @@
     <script type="text/javascript">
         var privateKey;
         var publicKey;
-        var externalECPublicKey
+
+        var externalECPublicKeyX = hexStringToUint8Array(document.getElementById("ecpublickey_x").value);
+        var externalECPublicKeyY = hexStringToUint8Array(document.getElementById("ecpublickey_y").value);
+        var externalECPublicKey;
+
+        console.log("externalECPublicKeyX ", externalECPublicKeyX)
+        console.log("externalECPublicKeyY", externalECPublicKeyY)
 
         var iv = new Uint8Array(16);
         console.log("iv .... ", iv)
 
+         
 
         function asciiToUint8Array(str) {
             var chars = [];
@@ -50,8 +57,8 @@
                 {   //this is an example jwk key, other key types are Uint8Array objects
                     kty: "EC",
                     crv: "P-256",
-                    x: hexStringToUint8Array(document.getElementById("ecpublickey_x").value), 
-                    y: hexStringToUint8Array(document.getElementById("ecpublickey_y").value),
+                    x: externalECPublicKeyX, 
+                    y: externalECPublicKeyY,
                     ext: true,
                 },
                 {   //these are the algorithm options
