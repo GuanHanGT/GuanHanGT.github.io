@@ -200,10 +200,13 @@
                 alert("Generate ECDH Key First");
                 return;
             }
-            const digest = crypto.subtle.digest("SHA-256", plainText);
-            document.getElementById("sha256Text").value = digest;
 
-            document.getElementById("sha256Left16Text").value = digest.substr( 0 , 16 ); 
+            const digestBuffer = await digestMessage(plainText);
+            console.log("digest", bufToHex(digestBuffer));
+
+            document.getElementById("sha256Text").value = bufToHex(digestBuffer);
+
+            document.getElementById("sha256Left16Text").value = bufToHex(digestBuffer).substr( 0 , 16 ); 
 
             obj = JSON.parse(deriveKeyUsage);
             alg1 = obj.alg;
@@ -385,6 +388,14 @@
                 return String.fromCharCode(val);
             }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
         }
+
+        async function digestMessage(message) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(message);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return hash;
+        }
+
     </script>
 
 
