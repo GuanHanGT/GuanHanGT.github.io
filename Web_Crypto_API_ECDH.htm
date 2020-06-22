@@ -299,9 +299,9 @@
                 console.log('CredID: ', bufToHex(authData.credID));
                 console.log('AAGUID: ', bufToHex(authData.aaguid));
                 console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
-                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
-                document.getElementById("ecpublickey_x").value = publicKEy.x
-                document.getElementById("ecpublickey_y").value = publicKEy.y
+                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer).getECPublicKey;
+                document.getElementById("ecpublickey_x").value = publicKEy['-2'];
+                document.getElementById("ecpublickey_y").value = publicKEy['-3'];
                 
                 alert('Test DONE!!!');
             })
@@ -326,8 +326,8 @@
             <br> ECDH Key public 
             
             <p><button type="button" class="btn btn-primary" onclick="getECPublicKey()">Get ECKey </button></p>
-            <input class="form-control" type="text" size="100" name="ecpublickey_x" id="ecpublickey_x" readonly="true">
-            <input class="form-control" type="text" size="100" name="ecpublickey_y" id="ecpublickey_y" readonly="true">
+            <p><input class="form-control" type="text" size="100" name="ecpublickey_x" id="ecpublickey_x" readonly="true"> </p>
+            <p> <input class="form-control" type="text" size="100" name="ecpublickey_y" id="ecpublickey_y" readonly="true"></p>
         </div>
         <p><strong>Named Curve reference</strong></p>
         <ol start="1">
