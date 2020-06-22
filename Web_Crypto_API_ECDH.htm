@@ -50,8 +50,8 @@
                 {   //this is an example jwk key, other key types are Uint8Array objects
                     kty: "EC",
                     crv: "P-256",
-                    x: bytesToHexString(document.getElementById("ecpublickey_x").value), 
-                    y: bytesToHexString(document.getElementById("ecpublickey_y").value),
+                    x: hexStringToUint8Array(document.getElementById("ecpublickey_x").value), 
+                    y: hexStringToUint8Array(document.getElementById("ecpublickey_y").value),
                     ext: true,
                 },
                 {   //these are the algorithm options
@@ -122,7 +122,7 @@
                             window.crypto.subtle.exportKey("jwk", keydata).then(
                                 function(keydata) {
                                     dKey = keydata;
-                                    document.getElementById("deriveKey").value = dKey.k
+                                    //document.getElementById("deriveKey").value = dKey.k
                                     document.getElementById("deriveKeyUsage").value = JSON.stringify(dKey)
                                 }
                             );
