@@ -48,15 +48,19 @@
 
 
                
-        
+            const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
+            
+            
+            btoa(String.fromCharCode.apply(null, sliced))
 
-            var externalECPublicKeyX = hexStringToUint8Array(document.getElementById("ecpublickey_x").value);
-            var externalECPublicKeyY = hexStringToUint8Array(document.getElementById("ecpublickey_y").value);
+
+            var externalECPublicKeyX = windows.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_x").value));
+            var externalECPublicKeyY = windows.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_y").value));
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
             window.crypto.subtle.importKey(
-                "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
                 {   //this is an example jwk key, other key types are Uint8Array objects
                     kty: "EC",
                     crv: "P-256",
