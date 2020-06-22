@@ -53,8 +53,8 @@
 
             
 
-            var externalECPublicKeyX = window.btoa(bEx_ecX);
-            var externalECPublicKeyY = window.btoa(bEx_ecY);
+            var externalECPublicKeyX = window.btoa(String.fromCharCode.apply(null, new Uint8Array(bEx_ecX)));
+            var externalECPublicKeyY = window.btoa(String.fromCharCode.apply(null, new Uint8Array(bEx_ecY)));
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
