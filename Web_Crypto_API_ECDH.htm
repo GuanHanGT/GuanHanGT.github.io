@@ -17,13 +17,8 @@
     <script type="text/javascript">
         var privateKey;
         var publicKey;
-
-        var externalECPublicKeyX = hexStringToUint8Array(document.getElementById("ecpublickey_x").value);
-        var externalECPublicKeyY = hexStringToUint8Array(document.getElementById("ecpublickey_y").value);
         var externalECPublicKey;
-
-        console.log("externalECPublicKeyX ", externalECPublicKeyX)
-        console.log("externalECPublicKeyY", externalECPublicKeyY)
+ 
 
         var iv = new Uint8Array(16);
         console.log("iv .... ", iv)
@@ -51,6 +46,14 @@
             
             iv = crypto.getRandomValues(new Uint8Array(16));
 
+
+               
+        
+
+            var externalECPublicKeyX = hexStringToUint8Array(document.getElementById("ecpublickey_x").value);
+            var externalECPublicKeyY = hexStringToUint8Array(document.getElementById("ecpublickey_y").value);
+            console.log("externalECPublicKeyX ", externalECPublicKeyX);
+            console.log("externalECPublicKeyY", externalECPublicKeyY);
 
             window.crypto.subtle.importKey(
                 "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
@@ -111,7 +114,7 @@
                     window.crypto.subtle.deriveKey({
                                 name: "ECDH",
                                 namedCurve: curve, //can be "P-256", "P-384", or "P-521"
-                                public: external_public, //an ECDH public key from generateKey or importKey
+                                public: externalECPublicKey, //an ECDH public key from generateKey or importKey
                             },
                             privateKey, //your ECDH private key from generateKey or importKey
                             { //the key type you want to create based on the derived bits
