@@ -47,11 +47,7 @@
             iv = crypto.getRandomValues(new Uint8Array(16));
 
 
-               
-            const sliced = new Uint8Array(authData.credID.slice(1,authData.credID.length))
-            
-            
-            btoa(String.fromCharCode.apply(null, sliced))
+        
 
 
             var externalECPublicKeyX = windows.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_x").value));
