@@ -200,7 +200,7 @@
                 alert("Generate ECDH Key First");
                 return;
             }
-            const digest = crypto.subtle.digest(SHA-256, plainText);
+            const digest = crypto.subtle.digest("SHA-256", plainText);
             document.getElementById("sha256Text").value = digest;
 
             document.getElementById("sha256Left16Text").value = digest.substr( 0 , 16 ); 
@@ -220,8 +220,6 @@
                 return crypto.subtle.encrypt({
                     name: "aes-cbc",
                     iv: iv,
-                    //                    counter: iv,
-                    //                    length: 128
                 }, key, asciiToUint8Array(plainText));
             }, failAndLog).then(function (cipherText) {
                 document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
