@@ -51,63 +51,46 @@
             iv = crypto.getRandomValues(new Uint8Array(16));
 
 
-            
 
-            var externalECPublicKeyX = window.btoa(String.fromCharCode.apply(null, new Uint8Array(bEx_ecX)));
-            var externalECPublicKeyY = window.btoa(String.fromCharCode.apply(null, new Uint8Array(bEx_ecY)));
+
+            var externalECPublicKeyX = base64EncodeURL(String.fromCharCode.apply(null, new Uint8Array(bEx_ecX)));
+            var externalECPublicKeyY = base64EncodeURL(String.fromCharCode.apply(null, new Uint8Array(bEx_ecY)));
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
-            var rawExterECpublic = new  Uint8Array(65);
-            rawExterECpublic[0]=0x04;
-            rawExterECpublic.set( new Uint8Array(bEx_ecX),1);
-            rawExterECpublic.set( new Uint8Array(bEx_ecY), bEx_ecX.byteLength);
+            // var rawExterECpublic = new  Uint8Array(65);
+            // rawExterECpublic[0]=0x04;
+            // rawExterECpublic.set( new Uint8Array(bEx_ecX),1);
+            // rawExterECpublic.set( new Uint8Array(bEx_ecY), bEx_ecX.byteLength);
 
-            // window.crypto.subtle.importKey(
-            //     "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
-            //     {   //this is an example jwk key, other key types are Uint8Array objects
-            //         kty: "EC",
-            //         crv: "P-256",
-            //         x: externalECPublicKeyX, 
-            //         y: externalECPublicKeyY,
-            //         d:'', 
-            //         ext: true,
-            //     },
-            //     {   //these are the algorithm options
-            //         name: "ECDH",
-            //         namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
-            //     },
-            //     true, //whether the key is extractable (i.e. can be used in exportKey)
-            //     ["deriveKey", "deriveBits"] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
-            // )
-            // .then(function(external_public){
-            //     //returns a privateKey (or publicKey if you are importing a public key)
-            //     //externalECPublicKey = external_public;
-            //     console.log("external_public",external_public);
-            // })
-            // .catch(function(err){
-            //     console.error(err);
-            // });
+            window.crypto.subtle.importKey(
+                    "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                    { //this is an example jwk key, other key types are Uint8Array objects
+                        kty: "EC",
+                        crv: "P-256",
+                        x: externalECPublicKeyX,
+                        y: externalECPublicKeyY,
+                        d: '',
+                        ext: true,
+                    }, { //these are the algorithm options
+                        name: "ECDH",
+                        namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
+                    },
+                    true, //whether the key is extractable (i.e. can be used in exportKey)
+                    ["deriveKey",
+                    "deriveBits"] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
+                )
+                .then(function (external_public) {
+                    //returns a privateKey (or publicKey if you are importing a public key)
+                    //externalECPublicKey = external_public;
+                    console.log("external_public", external_public);
+                })
+                .catch(function (err) {
+                    console.error(err);
+                });
 
-             window.crypto.subtle.importKey(
-                "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
-                rawExterECpublic,
-                {   //these are the algorithm options
-                    name: "ECDH",
-                    namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
-                },
-                true, //whether the key is extractable (i.e. can be used in exportKey)
-                ["deriveKey", "deriveBits"] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
-            )
-            .then(function(external_public){
-                //returns a privateKey (or publicKey if you are importing a public key)
-                //externalECPublicKey = external_public;
-                console.log("external_public",external_public);
-            })
-            .catch(function(err){
-                console.error(err);
-            });
-            
+
+
             window.crypto.subtle.generateKey({
                         name: "ECDH",
                         namedCurve: curve, //can be "P-256", "P-384", or "P-521"
@@ -135,14 +118,14 @@
 
                     //         publicKeyhold = keydata;
                     //         console.log("key.publicKey",  bufToHex(keydata));
-                            
+
                     //     }
                     // );
 
                     window.crypto.subtle.exportKey("jwk", key.privateKey).then(
                         function (keydata) {
                             privateKeyhold = keydata;
-                           
+
                             privateKeyJson = JSON.stringify(privateKeyhold);
                             document.getElementById("ecdhprivate").value = privateKeyJson;
                         }
@@ -394,6 +377,13 @@
 
                     alert('Test DONE!!!');
                 })
+        }
+
+
+        function base64EncodeURL(byteArray) {
+            return btoa(Array.from(new Uint8Array(byteArray)).map(val => {
+                return String.fromCharCode(val);
+            }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
         }
     </script>
 
