@@ -76,12 +76,11 @@
                         namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
                     },
                     true, //whether the key is extractable (i.e. can be used in exportKey)
-                    ["deriveKey",
-                    "deriveBits"] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
+                    [] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
                 )
                 .then(function (external_public) {
                     //returns a privateKey (or publicKey if you are importing a public key)
-                    //externalECPublicKey = external_public;
+                    externalECPublicKey = external_public;
                     console.log("external_public", external_public);
                 })
                 .catch(function (err) {
