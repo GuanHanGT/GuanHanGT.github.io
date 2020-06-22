@@ -200,6 +200,10 @@
                 alert("Generate ECDH Key First");
                 return;
             }
+            const digest = crypto.subtle.digest(SHA-256, plainText);
+            document.getElementById("sha256Text").value = digest;
+
+            document.getElementById("sha256Left16Text").value = digest.substr( 0 , 16 ); 
 
             obj = JSON.parse(deriveKeyUsage);
             alg1 = obj.alg;
@@ -424,7 +428,12 @@
 
         </div>
         <div> Encrypt Using ECDH Derived Key (Master)
-            <input class="form-control" type="text" name="plainText" value="Hello 8gwifi" id="plainText"> Output
+            <input class="form-control" type="text" name="plainText" value="PIN value" id="plainText"> 
+             SHA256
+            <input class="form-control" type="text" name="sha256Text" id="sha256Text"> 
+            LEFT(SHA256's value, 16)
+            <input class="form-control" type="text" name="sha256Left16Text" id="sha256Left16Text"> 
+            Output
             <input class="form-control" type="text" size="100" name="cipherTextGCM" id="cipherTextGCM">
             <br>
             <button type="button" class="btn btn-primary" onclick="ECDH_AES_CTR_Encrypt()">Encrypt ECDH-AES-CBC
