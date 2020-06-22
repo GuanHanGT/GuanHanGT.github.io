@@ -21,6 +21,8 @@
         var publicKey;
         var externalECPublicKey;
 
+        var bEx_ecX;
+        var bEx_ecY;
 
         var iv = new Uint8Array(16);
         console.log("iv .... ", iv)
@@ -49,12 +51,10 @@
             iv = crypto.getRandomValues(new Uint8Array(16));
 
 
-            var ex_ecX = document.getElementById("ecpublickey_x").value;
-            var ex_ecY = document.getElementById("ecpublickey_y").value;
+            
 
-
-            var externalECPublicKeyX = window.btoa(hexStringToUint8Array(ex_ecX));
-            var externalECPublicKeyY = window.btoa(hexStringToUint8Array(ex_ecY));
+            var externalECPublicKeyX = window.btoa(bEx_ecX);
+            var externalECPublicKeyY = window.btoa(bEx_ecY);
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
@@ -361,6 +361,9 @@
 
                     console.log('X point: ', bufToHex(Object.values(publicKEy)[3]));
                     console.log('Y point: ', bufToHex(Object.values(publicKEy)[4]));
+
+                    bEx_ecX = Object.values(publicKEy)[3];
+                    bEx_ecY = Object.values(publicKEy)[4];
 
                     document.getElementById("ecpublickey_x").value = bufToHex(Object.values(publicKEy)[3]);
                     document.getElementById("ecpublickey_y").value = bufToHex(Object.values(publicKEy)[4]);
