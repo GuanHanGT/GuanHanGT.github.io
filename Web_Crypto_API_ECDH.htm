@@ -91,14 +91,7 @@
 
              window.crypto.subtle.importKey(
                 "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
-                {   //this is an example jwk key, other key types are Uint8Array objects
-                    kty: "EC",
-                    crv: "P-256",
-                    x: externalECPublicKeyX, 
-                    y: externalECPublicKeyY,
-                    d:'', 
-                    ext: true,
-                },
+                rawExterECpublic,
                 {   //these are the algorithm options
                     name: "ECDH",
                     namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
