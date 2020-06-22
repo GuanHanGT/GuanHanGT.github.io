@@ -59,7 +59,7 @@
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
             window.crypto.subtle.importKey(
-                "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
                 {   //this is an example jwk key, other key types are Uint8Array objects
                     kty: "EC",
                     crv: "P-256",
