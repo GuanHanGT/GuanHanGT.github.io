@@ -50,8 +50,8 @@
         
 
 
-            var externalECPublicKeyX = windows.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_x").value));
-            var externalECPublicKeyY = windows.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_y").value));
+            var externalECPublicKeyX = window.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_x").value));
+            var externalECPublicKeyY = window.btoa(hexStringToUint8Array(document.getElementById("ecpublickey_y").value));
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
