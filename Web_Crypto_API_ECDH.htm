@@ -300,8 +300,8 @@
                 console.log('AAGUID: ', bufToHex(authData.aaguid));
                 console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
                 var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer).getECPublicKey;
-                document.getElementById("ecpublickey_x").value = publicKEy['-2'];
-                document.getElementById("ecpublickey_y").value = publicKEy['-3'];
+                document.getElementById("ecpublickey_x").value = publicKEy[-2];
+                document.getElementById("ecpublickey_y").value = publicKEy[-3];
                 
                 alert('Test DONE!!!');
             })
