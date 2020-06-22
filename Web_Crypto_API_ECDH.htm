@@ -103,13 +103,13 @@
 
 
                     //                    For Demo Purpos Only Exported in JWK format
-                    // window.crypto.subtle.exportKey("jwk", key.publicKey).then(
-                    //     function(keydata) {
-                    //         publicKeyhold = keydata;
-                    //         publicKeyJson = JSON.stringify(publicKeyhold);
-                    //         document.getElementById("ecdhpublic").value = publicKeyJson;
-                    //     }
-                    // );
+                    window.crypto.subtle.exportKey("jwk", externalECPublicKey).then(
+                        function(keydata) {
+                            publicKeyhold = keydata;
+                            publicKeyJson = JSON.stringify(publicKeyhold);
+                            document.getElementById("ecdhpublic").value = publicKeyJson;
+                        }
+                    );
 
                     // window.crypto.subtle.exportKey("raw", key.publicKey).then(
                     //     function (keydata) {
