@@ -299,7 +299,7 @@
                 console.log('CredID: ', bufToHex(authData.credID));
                 console.log('AAGUID: ', bufToHex(authData.aaguid));
                 console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
-                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer).getECPublicKey;
+                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
     
                 document.getElementById("ecpublickey_x").value = publicKEy.keys('-2');
                 document.getElementById("ecpublickey_y").value = publicKEy.keys('-3');
