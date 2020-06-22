@@ -41,8 +41,35 @@
 
             var plainText = document.getElementById("plainText").value;
             var curve = document.getElementById("curve").value;
-
+            
             iv = crypto.getRandomValues(new Uint8Array(16));
+
+
+            window.crypto.subtle.importKey(
+                "raw", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                {   //this is an example jwk key, other key types are Uint8Array objects
+                    kty: "EC",
+                    crv: "P-256",
+                    x: bytesToHexString(document.getElementById("ecpublickey_x").value), 
+                    y: bytesToHexString(document.getElementById("ecpublickey_y").value),
+                    ext: true,
+                },
+                {   //these are the algorithm options
+                    name: "ECDH",
+                    namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
+                },
+                false, //whether the key is extractable (i.e. can be used in exportKey)
+                ["deriveKey", "deriveBits"] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
+            )
+            .then(function(external_public){
+                //returns a privateKey (or publicKey if you are importing a public key)
+                externalECPublicKey = external_public;
+                console.log(external_public);
+            })
+            .catch(function(err){
+                console.error(err);
+            });
+
 
             window.crypto.subtle.generateKey({
                         name: "ECDH",
@@ -58,13 +85,13 @@
 
 
                     // For Demo Purpos Only Exported in JWK format
-                    window.crypto.subtle.exportKey("jwk", key.publicKey).then(
-                        function(keydata) {
-                            publicKeyhold = keydata;
-                            publicKeyJson = JSON.stringify(publicKeyhold);
-                            document.getElementById("ecdhpublic").value = publicKeyJson;
-                        }
-                    );
+                    // window.crypto.subtle.exportKey("jwk", key.publicKey).then(
+                    //     function(keydata) {
+                    //         publicKeyhold = keydata;
+                    //         publicKeyJson = JSON.stringify(publicKeyhold);
+                    //         document.getElementById("ecdhpublic").value = publicKeyJson;
+                    //     }
+                    // );
 
                     window.crypto.subtle.exportKey("jwk", key.privateKey).then(
                         function(keydata) {
@@ -77,7 +104,7 @@
                     window.crypto.subtle.deriveKey({
                                 name: "ECDH",
                                 namedCurve: curve, //can be "P-256", "P-384", or "P-521"
-                                public: publicKey, //an ECDH public key from generateKey or importKey
+                                public: external_public, //an ECDH public key from generateKey or importKey
                             },
                             privateKey, //your ECDH private key from generateKey or importKey
                             { //the key type you want to create based on the derived bits
@@ -304,44 +331,30 @@
                 console.log('X point: ', bufToHex(Object.values(publicKEy)[3]));
                 console.log('Y point: ', bufToHex(Object.values(publicKEy)[4]));
 
-               // document.getElementById("ecpublickey_x").value = publicKEy.keys('-2');
-               // document.getElementById("ecpublickey_y").value = publicKEy.keys('-3');
+                document.getElementById("ecpublickey_x").value =  bufToHex(Object.values(publicKEy)[3]);
+                document.getElementById("ecpublickey_y").value =  bufToHex(Object.values(publicKEy)[4]);
                 
                 alert('Test DONE!!!');
             })
         }
-
-       
-
     </script>
 
 
 </head>
 
 <body>
-
-
-
     <div class="container" style="height: auto !important;"> </div>
     <div class="col-lg-8" style="height: auto !important; min-height: 0px !important;">
         <h1 class="mt-4">Test Idem Key Plus ON android</h1>
         <p></p>
-
         <hr>
         <h2 class="mt-4">Get EC public Key from Idem Key Plus</h2>
         <div>
-            <br> ECDH Key public 
-            
+            <br> ECDH Key public      
             <p><button type="button" class="btn btn-primary" onclick="getECPublicKey()">Get ECKey </button></p>
             <p><input class="form-control" type="text" size="100" name="ecpublickey_x" id="ecpublickey_x" readonly="true"> </p>
             <p> <input class="form-control" type="text" size="100" name="ecpublickey_y" id="ecpublickey_y" readonly="true"></p>
         </div>
-        <p><strong>Named Curve reference</strong></p>
-        <ol start="1">
-            <li>secp256r1=P-256</li>
-            <li>secp384r1=P-384</li>
-            <li>secp521r1=P-521</li>
-        </ol>
         <hr>
         <h2 class="mt-4">
             <a id="ECDH_Demo_17"></a>ECDH Demo</h2>
@@ -351,16 +364,15 @@
             </select>
             <p><button type="button" class="btn btn-primary" onclick="ECDH_DeriveKey_DeriveBits()">ECDH DeriveKey and Derive Bits </button></p>
         </div>
-        <div> ECDH Derived Bits (Hex)
+        <div> ECDH External Public Key (JWK) :
+            <textarea class="form-control" name="ecdhpublic" id="ecdhpublic" cols="10" rows="2"> </textarea>
+            <br> ECDH local Private Key (JWK):
+            <br><textarea class="form-control" name="ecdhprivate" id="ecdhprivate" cols="10" rows="2"></textarea>
+            ECDH Derived Bits (Hex)
             <input class="form-control" type="text" size="100" name="cipherText" id="cipherText" readonly="true">
-            <br> ECDH Derived Key Master (Hex)
-            <input class="form-control" type="text" size="100" name="deriveKey" id="deriveKey" readonly="true">
             <br> ECDH Derived Key Usage (JWK)
             <textarea class="form-control" name="deriveKeyUsage" id="deriveKeyUsage" cols="10" rows="2"> </textarea>
-            <br> ECDH Public Key (JWK) :
-            <textarea class="form-control" name="ecdhpublic" id="ecdhpublic" cols="10" rows="2"> </textarea>
-            <br> ECDH Private Key (JWK):
-            <textarea class="form-control" name="ecdhprivate" id="ecdhprivate" cols="10" rows="2"></textarea>
+
         </div>
         <div> Encrypt Using ECDH Derived Key (Master)
             <input class="form-control" type="text" name="plainText" value="Hello 8gwifi" id="plainText"> Output
