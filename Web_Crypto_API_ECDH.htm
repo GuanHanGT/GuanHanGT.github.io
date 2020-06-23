@@ -56,10 +56,6 @@
             console.log("externalECPublicKeyX ", externalECPublicKeyX);
             console.log("externalECPublicKeyY", externalECPublicKeyY);
 
-            // var rawExterECpublic = new  Uint8Array(65);
-            // rawExterECpublic[0]=0x04;
-            // rawExterECpublic.set( new Uint8Array(bEx_ecX),1);
-            // rawExterECpublic.set( new Uint8Array(bEx_ecY), bEx_ecX.byteLength);
 
             window.crypto.subtle.importKey(
                     "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
@@ -129,7 +125,7 @@
 
                     window.crypto.subtle.deriveKey({
                                 name: "ECDH",
-                                namedCurve: curve, //can be "P-256", "P-384", or "P-521"
+                                namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
                                 //public: externalECPublicKey, //an ECDH public key from generateKey or importKey
                                 public: publicKey //an ECDH public key from generateKey or importKey
                             },
@@ -139,6 +135,11 @@
                                 //the generateKey parameters for that type of algorithm
                                 length: 256, //can be  128, 192, or 256
                             },
+                            // { //the key type you want to create based on the derived bits
+                            //     name: "ECDH", //can be any AES algorithm ("AES-CTR", "AES-CBC", "AES-CMAC", "AES-GCM", "AES-CFB", "AES-KW", "ECDH", "DH", or "HMAC")
+                            //     //the generateKey parameters for that type of algorithm
+                            //     length: 256, //can be  128, 192, or 256
+                            // },
                             true, //whether the derived key is extractable (i.e. can be used in exportKey)
                             ["encrypt", "decrypt"] //limited to the options in that algorithm's importKey
                         )
