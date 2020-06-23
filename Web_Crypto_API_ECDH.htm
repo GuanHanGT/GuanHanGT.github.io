@@ -228,7 +228,7 @@
                     return crypto.subtle.encrypt({
                         name: "aes-cbc",
                         iv: iv,
-                    }, key, asciiToUint8Array(plainText));
+                    }, key, digestBytes.slice(0,16));
                 }, failAndLog).then(function (cipherText) {
                     document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
                 }, failAndLog);
