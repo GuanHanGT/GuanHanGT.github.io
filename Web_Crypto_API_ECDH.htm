@@ -204,7 +204,7 @@
             const data = encoder.encode(plainText);
             var digestBuffer;
             crypto.subtle.digest(
-                'SHA256',
+                "SHA-256",
                 data
             ).then(function (digestBytes){
                 digestBuffer = digestBytes;
