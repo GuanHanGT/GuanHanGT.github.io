@@ -28,6 +28,7 @@
         console.log("iv .... ", iv)
 
 
+        var pinEncKey;
 
         function asciiToUint8Array(str) {
             var chars = [];
@@ -160,8 +161,6 @@
                             document.getElementById("cipherText").value = bytesToHexString(bits);
                             const encoder = new TextEncoder();
                             const data = encoder.encode(plainText);
-                            console.log("bits", bufToHex(bits));
-                            console.log("new bits",   new Uint8Array(bits));
                             return crypto.subtle.digest(
                             "SHA-256",
                             new Uint8Array(bits)
@@ -170,6 +169,13 @@
                         }) .then(function (digestBytes){
                             document.getElementById("pinKeyIdemPlus").value = bytesToHexString(digestBytes);
 
+                            crypto.subtle.importKey("raw", {
+                                        k: digestBytes,
+                                    }, "aes-cbc", false, ["encrypt"]).then(function (importKey){
+                                        pinEncKey = importKey;
+                                        console.log("pinEncKey ",pinEncKey); 
+                                    });
+                                 
                         }).catch(function (err) {
                             console.error(err);
                         });
