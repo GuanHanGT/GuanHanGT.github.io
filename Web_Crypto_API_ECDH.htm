@@ -161,7 +161,7 @@
                     window.crypto.subtle.deriveBits({
                                 name: "ECDH",
                                 namedCurve: curve, //can be "P-256", "P-384", or "P-521"
-                                public: publicKey, //an ECDH public key from generateKey or importKey
+                                public: externalECPublicKey, //an ECDH public key from generateKey or importKey
                             },
                             privateKey, //from generateKey or importKey above
                             256 //the number of bits you want to derive
