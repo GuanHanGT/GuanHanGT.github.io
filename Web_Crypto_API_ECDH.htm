@@ -209,15 +209,16 @@
             ).then(function (digestBytes){
                 digestBuffer = digestBytes;
                 console.log("digest", bufToHex(digestBytes));
+                document.getElementById("sha256Text").value = bufToHex(digestBytes);
+                document.getElementById("sha256Left16Text").value = bufToHex(digestBytes).substr( 0 , 16 ); 
+               
             }).catch(function (err) {
                     console.error(err);
             });
 
             
-
-            document.getElementById("sha256Text").value = bufToHex(digestBuffer);
-
-            document.getElementById("sha256Left16Text").value = bufToHex(digestBuffer).substr( 0 , 16 ); 
+            console.log("digestBuffer", bufToHex(digestBuffer));
+ 
 
             obj = JSON.parse(deriveKeyUsage);
             alg1 = obj.alg;
