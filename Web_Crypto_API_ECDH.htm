@@ -212,6 +212,26 @@
                 console.log(digestBytes.slice(0,16));
                 document.getElementById("sha256Left16Text").value = bufToHex(digestBytes).substr( 0 , 32 ); 
                
+                obj = JSON.parse(deriveKeyUsage);
+                alg1 = obj.alg;
+                ext1 = obj.ext;
+                k1 = obj.k;
+                kty1 = obj.kty;
+                console.log("iv .... ", iv);
+                
+                crypto.subtle.importKey("jwk", {
+                    alg: alg1,
+                    ext: ext1,
+                    k: k1,
+                    kty: kty1
+                }, "aes-cbc", false, ["encrypt"]).then(function (key) {
+                    return crypto.subtle.encrypt({
+                        name: "aes-cbc",
+                        iv: iv,
+                    }, key, asciiToUint8Array(plainText));
+                }, failAndLog).then(function (cipherText) {
+                    document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
+                }, failAndLog);
             }).catch(function (err) {
                     console.error(err);
             });
@@ -219,26 +239,7 @@
 
  
 
-            obj = JSON.parse(deriveKeyUsage);
-            alg1 = obj.alg;
-            ext1 = obj.ext;
-            k1 = obj.k;
-            kty1 = obj.kty;
-            console.log("iv .... ", iv);
-            
-            crypto.subtle.importKey("jwk", {
-                alg: alg1,
-                ext: ext1,
-                k: k1,
-                kty: kty1
-            }, "aes-cbc", false, ["encrypt"]).then(function (key) {
-                return crypto.subtle.encrypt({
-                    name: "aes-cbc",
-                    iv: iv,
-                }, key, asciiToUint8Array(plainText));
-            }, failAndLog).then(function (cipherText) {
-                document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
-            }, failAndLog);
+           
         }
 
 
