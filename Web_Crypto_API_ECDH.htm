@@ -105,22 +105,6 @@
                         }
                     );
 
-                    // window.crypto.subtle.exportKey("jwk", publicKey).then(
-                    //     function(keydata) {
-                    //         publicKeyhold = keydata;
-                    //         publicKeyJson = JSON.stringify(publicKeyhold);
-                    //         document.getElementById("ecdhpublic").value = publicKeyJson;
-                    //     }
-                    // );
-                    
-                    // window.crypto.subtle.exportKey("raw", key.publicKey).then(
-                    //     function (keydata) {
-
-                    //         publicKeyhold = keydata;
-                    //         console.log("key.publicKey",  bufToHex(keydata));
-
-                    //     }
-                    // );
 
                     window.crypto.subtle.exportKey("jwk", key.privateKey).then(
                         function (keydata) {
@@ -225,22 +209,26 @@
                 kty1 = obj.kty;
                 console.log(" digestBytes.slice(0,16)", digestBytes.slice(0,16));
                 
-                crypto.subtle.importKey("jwk", {
+                return crypto.subtle.importKey("jwk", {
                     alg: alg1,
                     ext: ext1,
                     k: k1,
                     kty: kty1
-                }, "aes-cbc", false, ["encrypt"]).then(function (key) {
+                }, "aes-cbc", false, ["encrypt"]);
+                
+            }).then(function (key) {
                     return crypto.subtle.encrypt({
                         name: "aes-cbc",
                         iv
                     }, key, digestBytes.slice(0,16));
-                }, failAndLog).then(function (cipherText) {
+        
+            }, failAndLog).then(function (cipherText) {
                     console.log(" CipherText", cipherText);
-                    document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
-                }, failAndLog);
-            }).catch(function (err) {
+                    document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText.slice(0,16));
+               
+            }, failAndLog).catch(function (err) {
                     console.error(err);
+                    
             });
 
 
@@ -451,6 +439,9 @@
             <input class="form-control" type="text" size="100" name="cipherText" id="cipherText" readonly="true">
             <br> ECDH Derived Key Usage (JWK)
             <textarea class="form-control" name="deriveKeyUsage" id="deriveKeyUsage" cols="10" rows="2"> </textarea>
+
+            <br> Idem Key Plus share KEY(= sha256(ECDH Derived Bits))
+            <textarea class="form-control" name="pinKeyIdemPlus" id="pinKeyIdemPlus" cols="10" rows="2"> </textarea>
 
         </div>
         <div> Encrypt User PIN Using ECDH Derived Key (Master)
