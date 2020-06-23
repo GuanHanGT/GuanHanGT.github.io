@@ -138,7 +138,6 @@
                             window.crypto.subtle.exportKey("jwk", keydata).then(
                                 function (keydata) {
                                     dKey = keydata;
-                                    //document.getElementById("deriveKey").value = dKey.k
                                     document.getElementById("deriveKeyUsage").value = JSON.stringify(dKey)
                                 }
                             );
@@ -159,9 +158,11 @@
                         .then(function (bits) {
                             //returns an ArrayBuffer containing the signature
                             document.getElementById("cipherText").value = bytesToHexString(bits);
+                            const encoder = new TextEncoder();
+                        const data = encoder.encode(plainText)
                             return crypto.subtle.digest(
                             "SHA-256",
-                            bits
+                            new Uint8Array(bits)
                             );
 
                         }) .then(function (digestBytes){
