@@ -96,7 +96,7 @@
                     privateKey = key.privateKey;
 
 
-                    //                    For Demo Purpos Only Exported in JWK format
+                                       For Demo Purpos Only Exported in JWK format
                     window.crypto.subtle.exportKey("jwk", externalECPublicKey).then(
                         function(keydata) {
                             publicKeyhold = keydata;
@@ -105,6 +105,14 @@
                         }
                     );
 
+                    // window.crypto.subtle.exportKey("jwk", publicKey).then(
+                    //     function(keydata) {
+                    //         publicKeyhold = keydata;
+                    //         publicKeyJson = JSON.stringify(publicKeyhold);
+                    //         document.getElementById("ecdhpublic").value = publicKeyJson;
+                    //     }
+                    // );
+                    
                     // window.crypto.subtle.exportKey("raw", key.publicKey).then(
                     //     function (keydata) {
 
@@ -125,21 +133,17 @@
 
                     window.crypto.subtle.deriveKey({
                                 name: "ECDH",
-                                namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
-                                //public: externalECPublicKey, //an ECDH public key from generateKey or importKey
-                                public: publicKey //an ECDH public key from generateKey or importKey
+                                namedCurve: curve, //can be "P-256", "P-384", or "P-521"
+                                public: externalECPublicKey, //an ECDH public key from generateKey or importKey
+                                //public: publicKey //an ECDH public key from generateKey or importKey
                             },
                             privateKey, //your ECDH private key from generateKey or importKey
                             { //the key type you want to create based on the derived bits
                                 name: "AES-CBC", //can be any AES algorithm ("AES-CTR", "AES-CBC", "AES-CMAC", "AES-GCM", "AES-CFB", "AES-KW", "ECDH", "DH", or "HMAC")
-                                //the generateKey parameters for that type of algorithm
-                                length: 256, //can be  128, 192, or 256
+                                 //the generateKey parameters for that type of algorithm
+                                 length: 256, //can be  128, 192, or 256
                             },
-                            // { //the key type you want to create based on the derived bits
-                            //     name: "ECDH", //can be any AES algorithm ("AES-CTR", "AES-CBC", "AES-CMAC", "AES-GCM", "AES-CFB", "AES-KW", "ECDH", "DH", or "HMAC")
-                            //     //the generateKey parameters for that type of algorithm
-                            //     length: 256, //can be  128, 192, or 256
-                            // },
+                            
                             true, //whether the derived key is extractable (i.e. can be used in exportKey)
                             ["encrypt", "decrypt"] //limited to the options in that algorithm's importKey
                         )
@@ -162,8 +166,8 @@
                     window.crypto.subtle.deriveBits({
                                 name: "ECDH",
                                 namedCurve: curve, //can be "P-256", "P-384", or "P-521"
-                                //public: externalECPublicKey, //an ECDH public key from generateKey or importKey
-                                public: publicKey
+                                public: externalECPublicKey, //an ECDH public key from generateKey or importKey
+                                //public: publicKey
                             },
                             privateKey, //from generateKey or importKey above
                             256 //the number of bits you want to derive
