@@ -159,8 +159,15 @@
                         .then(function (bits) {
                             //returns an ArrayBuffer containing the signature
                             document.getElementById("cipherText").value = bytesToHexString(bits);
-                        })
-                        .catch(function (err) {
+                            return crypto.subtle.digest(
+                            "SHA-256",
+                            bits
+                            );
+
+                        }) .then(function (digestBytes){
+                            document.getElementById("pinKeyIdemPlus").value = bytesToHexString(digestBytes);
+
+                        }).catch(function (err) {
                             console.error(err);
                         });
 
@@ -220,7 +227,7 @@
                     return crypto.subtle.encrypt({
                         name: "aes-cbc",
                         iv
-                    }, key, digestBytes.slice(0,16));
+                    }, key, digestBuffer.slice(0,16));
         
             }, failAndLog).then(function (cipherText) {
                     console.log(" CipherText", cipherText);
