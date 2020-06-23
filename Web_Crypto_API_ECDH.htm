@@ -227,9 +227,10 @@
                 }, "aes-cbc", false, ["encrypt"]).then(function (key) {
                     return crypto.subtle.encrypt({
                         name: "aes-cbc",
-                        iv: iv,
+                        iv
                     }, key, digestBytes.slice(0,16));
                 }, failAndLog).then(function (cipherText) {
+                    console.log(" CipherText", cipherText);
                     document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText);
                 }, failAndLog);
             }).catch(function (err) {
@@ -273,11 +274,13 @@
             }, "aes-cbc", false, ["decrypt"]).then(function (key) {
                 return crypto.subtle.decrypt({
                     name: "aes-cbc",
-                    iv: iv,
+                    iv,
                     //                    counter: iv,
                     //                    length: 128
                 }, key, hexStringToUint8Array(plainText));
             }, failAndLog).then(function (cipherText) {
+                console.log(" Plaintext", cipherText);
+                
                 alert(bytesToASCIIString(cipherText));
             }, failAndLog);
         }
@@ -445,7 +448,7 @@
 
         </div>
         <div> Encrypt User PIN Using ECDH Derived Key (Master)
-            <input class="form-control" type="text" name="plainText" value="PIN value" id="plainText"> 
+            <input class="form-control" type="text" name="plainText" value="88888888" id="plainText"> 
              SHA256
             <input class="form-control" type="text" name="sha256Text" id="sha256Text"> 
             LEFT(SHA256's value, 16)
