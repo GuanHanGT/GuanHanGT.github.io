@@ -159,7 +159,9 @@
                             //returns an ArrayBuffer containing the signature
                             document.getElementById("cipherText").value = bytesToHexString(bits);
                             const encoder = new TextEncoder();
-                        const data = encoder.encode(plainText)
+                            const data = encoder.encode(plainText);
+                            console.log("bits", bufToHex(bits));
+                            console.log("new bits",   new Uint8Array(bits));
                             return crypto.subtle.digest(
                             "SHA-256",
                             new Uint8Array(bits)
