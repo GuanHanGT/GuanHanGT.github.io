@@ -202,7 +202,7 @@
             }
             const encoder = new TextEncoder();
             const data = encoder.encode(plainText);
-            var digestBuffer;
+            var digestBuffer = [];
             crypto.subtle.digest(
                 "SHA-256",
                 data
@@ -446,7 +446,7 @@
             <textarea class="form-control" name="deriveKeyUsage" id="deriveKeyUsage" cols="10" rows="2"> </textarea>
 
         </div>
-        <div> Encrypt Using ECDH Derived Key (Master)
+        <div> Encrypt User PIN Using ECDH Derived Key (Master)
             <input class="form-control" type="text" name="plainText" value="PIN value" id="plainText"> 
              SHA256
             <input class="form-control" type="text" name="sha256Text" id="sha256Text"> 
