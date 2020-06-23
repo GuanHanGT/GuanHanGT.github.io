@@ -225,19 +225,19 @@
                 kty1 = obj.kty;
                 console.log(" digestBytes.slice(0,16)", digestBytes.slice(0,16));
                 
-                return crypto.subtle.importKey("jwk", {
-                    alg: alg1,
-                    ext: ext1,
-                    k: k1,
-                    kty: kty1
-                }, "aes-cbc", false, ["encrypt"]);
+            //     return crypto.subtle.importKey("jwk", {
+            //         alg: alg1,
+            //         ext: ext1,
+            //         k: k1,
+            //         kty: kty1
+            //     }, "aes-cbc", false, ["encrypt"]);
                 
-            }).then(function (key) {
+            // }).then(function (key) {
                     return crypto.subtle.encrypt({
                         name: "aes-cbc",
                         iv
-                    }, key, digestBuffer.slice(0,16));
-        
+                   // }, key, digestBuffer.slice(0,16));
+                    }, pinEncKey, digestBuffer.slice(0,16));
             }, failAndLog).then(function (cipherText) {
                     console.log(" CipherText", cipherText);
                     document.getElementById("cipherTextGCM").value = bytesToHexString(cipherText.slice(0,16));
