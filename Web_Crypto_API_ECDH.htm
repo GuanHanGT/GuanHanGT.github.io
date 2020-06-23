@@ -207,7 +207,7 @@
                 "SHA-256",
                 data
             ).then(function (digestBytes){
-                digestBuffer = newj Uint8Array(digestBytes);
+                digestBuffer = new Uint8Array(digestBytes);
                 console.log("digest", bufToHex(digestBytes));
                 document.getElementById("sha256Text").value = bufToHex(digestBytes);
 
