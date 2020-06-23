@@ -207,10 +207,13 @@
                 "SHA-256",
                 data
             ).then(function (digestBytes){
-                digestBuffer = digestBytes;
+                digestBuffer = new new Uint8Array(digestBytes);
                 console.log("digest", bufToHex(digestBytes));
                 document.getElementById("sha256Text").value = bufToHex(digestBytes);
-                document.getElementById("sha256Left16Text").value = bufToHex(digestBytes).substr( 0 , 16 ); 
+
+                console.log(digestBytes.slice(0,16));
+
+                document.getElementById("sha256Left16Text").value = bufToHex(digestBytes).substr( 0 , 32 ); 
                
             }).catch(function (err) {
                     console.error(err);
