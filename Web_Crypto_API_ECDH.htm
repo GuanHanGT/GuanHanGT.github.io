@@ -217,7 +217,7 @@
                 ext1 = obj.ext;
                 k1 = obj.k;
                 kty1 = obj.kty;
-                console.log("iv .... ", iv);
+                console.log(" digestBytes.slice(0,16)", digestBytes.slice(0,16));
                 
                 crypto.subtle.importKey("jwk", {
                     alg: alg1,
