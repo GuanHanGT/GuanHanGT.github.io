@@ -169,9 +169,9 @@
                         }) .then(function (digestBytes){
                             document.getElementById("pinKeyIdemPlus").value = bytesToHexString(digestBytes);
 
-                            crypto.subtle.importKey("raw", {
-                                        k: digestBytes,
-                                    }, "aes-cbc", false, ["encrypt"]).then(function (importKey){
+                            crypto.subtle.importKey("raw", 
+                                        digestBytes,
+                                         "aes-cbc", false, ["encrypt"]).then(function (importKey){
                                         pinEncKey = importKey;
                                         console.log("pinEncKey ",pinEncKey); 
                                     });
