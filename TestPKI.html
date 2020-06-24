@@ -666,6 +666,8 @@
             event.preventDefault();
 
 
+      
+
             let ckaLabel = document.getElementById('android-label').ckaLabel.value;
             let userpin = document.getElementById('android-pin').pin.value;
             console.log('android-label', ckaLabel);
@@ -681,7 +683,7 @@
             var externalECPublicKey;
             var exportECPublicKeyArray;
             var pinEncKey;
-            var EncryptPINArray;
+            var EncryptedPINArray;
             var android_readecdh = {
                 'challenge': challenge,
 
@@ -776,7 +778,7 @@
 
                 return window.crypto.subtle.deriveBits({
                         name: "ECDH",
-                        namedCurve: curve, //can be "P-256", "P-384", or "P-521"
+                        namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
                         public: externalECPublicKey, //an ECDH public key from generateKey or importKey
 
                     },
@@ -811,8 +813,64 @@
                     name: "aes-cbc",
                     iv
                 }, pinEncKey, digestBuffer.slice(0, 16));
-            }).then(function (cipherPIN) {
-                EncryptPINArray = cipherPIN;
+            }).then(function (cipherPIN) { // start get assertion
+                EncryptedPINArray = cipherPIN.slice(0, 16);
+                var enc = new TextEncoder();
+                var pki_buffer = [];
+                var challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
+                var ckalabel_buffer = new Uint8Array(ckaLabel.length + 1);
+                ckalabel_buffer[0] = ckaLabel.length;
+                ckalabel_buffer.set(new Uint8Array(enc.encode(ckaLabel)), 1);
+                var alg_buffer = new Uint8Array(1);
+                alg_buffer[0] = 0x02 //RSA2048-sha256:2 
+
+                var bSignData = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
+                var signDataBuffer= new Uint8Array(bSignData.length+1);
+                signDataBuffer[0]=signDataBuffer.length;
+                signDataBuffer.set(new Uint8Array(bSignData), 1);
+
+                var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength 
+                                                +ckaLabel_bufer.byteLength+alg_buffer.length+signDataBuffer.byteLength);
+                pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+                pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength);
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length);
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length+ckalabel_buffer.length);
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length+ckalabel_buffer.length+alg_buffer.length);
+                console.log("pki_buffer:"+bufToHex(pki_buffer));
+
+                var getAssertionChallenge = {
+                'challenge': challenge,
+                }
+                var idList = [{
+                    id: pki_buffer,
+                    transports: ["usb", "nfc", "ble"],
+                    type: "public-key"
+                }];
+
+                getAssertionChallenge.allowCredentials = idList;
+                console.log('List getAssertionChallenge', getAssertionChallenge)
+
+                navigator.credentials.get({
+                    'publicKey': getAssertionChallenge
+                })
+                .then((newCredentialInfo) => {
+
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log("Sign", newCredentialInfo.response.signature)
+                    const sign = newCredentialInfo.response.signature;
+                    var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+
+                    document.getElementById('show-sign').value = "Data:" + "\n" + signData + "\n" +
+                        "sign:" + "\n" + btoa(str);
+
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
 
             });
         })
