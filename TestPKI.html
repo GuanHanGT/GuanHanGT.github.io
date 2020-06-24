@@ -836,7 +836,7 @@
 
                 var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray
                     .byteLength + EncryptedPINArray.byteLength +
-                    ckalabel_buffer.byteLength + alg_buffer.length + signDataBuffer.byteLength);
+                    ckalabel_buffer.byteLength + alg_buffer.byteLength + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
                 console.log("1.pki_buffer:" + bufToHex(pki_buffer));
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
