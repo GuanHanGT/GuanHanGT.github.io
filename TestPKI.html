@@ -805,14 +805,14 @@
                     "SHA-256",
                     data);
             }).then(function (digestBytes) {
-                console.log(digestBytes.slice(0, 16));
+                console.log("digestBytes",digestBytes.slice(0, 16));
                 var iv = new Uint8Array(16);
                 console.log("iv .... ", iv);
 
                 return crypto.subtle.encrypt({
                     name: "aes-cbc",
                     iv
-                }, pinEncKey, digestBuffer.slice(0, 16));
+                }, pinEncKey, digestBytes.slice(0, 16));
             }).then(function (cipherPIN) { // start get assertion
                 EncryptedPINArray = cipherPIN.slice(0, 16);
                 var enc = new TextEncoder();
