@@ -751,8 +751,8 @@
 
             }).then(function (external_public) {
                 //returns a privateKey (or publicKey if you are importing a public key)
-                exterKey = external_public;
-                console.log("external_public", external_public);
+                externalECPublicKey = external_public;
+                console.log("external_public", externalECPublicKey);
                 return window.crypto.subtle.generateKey({
                         name: "ECDH",
                         namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
