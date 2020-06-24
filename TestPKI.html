@@ -809,15 +809,15 @@
                 return crypto.subtle.digest(
                     "SHA-256",
                     data);
-            }).then(function (digestBytes) {
-                console.log("digestBytes", bufToHex(digestBytes.slice(0, 16)));
+            }).then(function (userpin_digestBytes) {
+                console.log("userpin_digestBytes", bufToHex(userpin_digestBytes.slice(0, 16)));
                 var iv = new Uint8Array(16);
                 console.log("iv .... ", iv);
 
                 return crypto.subtle.encrypt({
                     name: "aes-cbc",
                     iv
-                }, pinEncKey, digestBytes.slice(0, 16));
+                }, pinEncKey, userpin_digestBytes.slice(0, 16));
             }).then(function (cipherPIN) { // start get assertion
                 
                 EncryptedPINArray = cipherPIN.slice(0, 16);
@@ -856,12 +856,7 @@
 
                 var getAssertionChallenge = {
                     'challenge': challenge,
-                    "authenticatorSelection": {
-                        "userVerification": "discouraged",
-                        "requireResidentKey": false,
-                        "authenticatorAttachment": "cross-platform"
-
-                    }
+                    "userVerification": "discouraged"
                 }
                 var idList = [{
                     id: pki_buffer,
