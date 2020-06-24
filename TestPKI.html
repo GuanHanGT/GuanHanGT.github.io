@@ -260,6 +260,10 @@
         // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
+        var signDataShortLength = 
+            'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZg==';
+        
+        
         document.getElementById('find-index').addEventListener('submit', function (event) {
             event.preventDefault();
             var pki_buffer = [];
@@ -829,24 +833,24 @@
                 var alg_buffer = new Uint8Array(1);
                 alg_buffer[0] = 0x02 //RSA2048-sha256:2 
 
-                var bSignData = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
+                var bSignData = Uint8Array.from(window.atob(signDataShortLength), c => c.charCodeAt(0));
                 var signDataBuffer = new Uint8Array(bSignData.length + 1);
-                signDataBuffer[0] = signDataBuffer.length;
+                signDataBuffer[0] = bSignData.length;
                 signDataBuffer.set(new Uint8Array(bSignData), 1);
 
                 var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray
                     .byteLength + EncryptedPINArray.byteLength +
                     ckalabel_buffer.byteLength + alg_buffer.byteLength + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-                console.log("1.pki_buffer:" + bufToHex(pki_buffer));
+         
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
-                console.log("2.pki_buffer:" + bufToHex(pki_buffer));
+            
                 pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength);
-                console.log("3.pki_buffer:" + bufToHex(pki_buffer));
+               
                 pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
-                console.log("4.pki_buffer:" + bufToHex(pki_buffer));
+ 
                 pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength);
-                    console.log("5.pki_buffer:" + bufToHex(pki_buffer));
+
                 pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength + alg_buffer.byteLength);
                 console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
