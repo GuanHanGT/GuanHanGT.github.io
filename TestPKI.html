@@ -841,14 +841,13 @@
                 console.log("1.pki_buffer:" + bufToHex(pki_buffer));
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
                 console.log("2.pki_buffer:" + bufToHex(pki_buffer));
-                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +
-                    exportECPublicKeyArray.byteLength);
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength);
                 console.log("3.pki_buffer:" + bufToHex(pki_buffer));
-                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.length);
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
                 console.log("4.pki_buffer:" + bufToHex(pki_buffer));
-                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.length + ckalabel_buffer.length);
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength);
                     console.log("5.pki_buffer:" + bufToHex(pki_buffer));
-                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.length + ckalabel_buffer.length + alg_buffer.length);
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength + alg_buffer.byteLength);
                 console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
                 var getAssertionChallenge = {
