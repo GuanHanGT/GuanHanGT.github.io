@@ -832,7 +832,7 @@
                 signDataBuffer.set(new Uint8Array(bSignData), 1);
 
                 var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength 
-                                                +ckaLabel_bufer.byteLength+alg_buffer.length+signDataBuffer.byteLength);
+                                                +ckalabel_buffer.byteLength+alg_buffer.length+signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
                 pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength);
