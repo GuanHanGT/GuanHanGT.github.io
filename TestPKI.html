@@ -666,7 +666,7 @@
             event.preventDefault();
 
 
-      
+
 
             let ckaLabel = document.getElementById('android-label').ckaLabel.value;
             let userpin = document.getElementById('android-pin').pin.value;
@@ -792,6 +792,7 @@
                     new Uint8Array(keybits)
                 );
             }).then(function (pinEncKeyBytes) {
+                console.log("pinEncKeyBytes", bufToHex(pinEncKeyBytes));
                 return crypto.subtle.importKey("raw",
                     pinEncKeyBytes,
                     "aes-cbc", false, ["encrypt"]);
@@ -805,7 +806,7 @@
                     "SHA-256",
                     data);
             }).then(function (digestBytes) {
-                console.log("digestBytes",digestBytes.slice(0, 16));
+                console.log("digestBytes", bufToHex(digestBytes.slice(0, 16)));
                 var iv = new Uint8Array(16);
                 console.log("iv .... ", iv);
 
@@ -827,22 +828,40 @@
                 alg_buffer[0] = 0x02 //RSA2048-sha256:2 
 
                 var bSignData = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
-                var signDataBuffer= new Uint8Array(bSignData.length+1);
-                signDataBuffer[0]=signDataBuffer.length;
+                var signDataBuffer = new Uint8Array(bSignData.length + 1);
+                signDataBuffer[0] = signDataBuffer.length;
                 signDataBuffer.set(new Uint8Array(bSignData), 1);
 
-                var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength 
-                                                +ckalabel_buffer.byteLength+alg_buffer.length+signDataBuffer.byteLength);
+                var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + exportECPublicKeyArray
+                    .byteLength + EncryptedPINArray.byteLength +
+                    ckalabel_buffer.byteLength + alg_buffer.length + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+                console.log("1.pki_buffer:" + bufToHex(pki_buffer));
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
-                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength);
-                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length);
-                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length+ckalabel_buffer.length);
-                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength+exportECPublicKeyArray.byteLength+EncryptedPINArray.length+ckalabel_buffer.length+alg_buffer.length);
-                console.log("pki_buffer:"+bufToHex(pki_buffer));
+                console.log("2.pki_buffer:" + bufToHex(pki_buffer));
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength);
+                    console.log("3.pki_buffer:" + bufToHex(pki_buffer));
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.length);
+                    console.log("4.pki_buffer:" + bufToHex(pki_buffer));
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.length + ckalabel_buffer
+                    .length);
+                    console.log("5.pki_buffer:" + bufToHex(pki_buffer));
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.length + ckalabel_buffer
+                    .length + alg_buffer.length);
+                console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
                 var getAssertionChallenge = {
-                'challenge': challenge,
+                    'challenge': challenge,
+                    "authenticatorSelection": {
+                        "userVerification": "discouraged",
+                        "requireResidentKey": false,
+                        "authenticatorAttachment": "cross-platform"
+
+                    }
                 }
                 var idList = [{
                     id: pki_buffer,
@@ -854,23 +873,24 @@
                 console.log('List getAssertionChallenge', getAssertionChallenge)
 
                 navigator.credentials.get({
-                    'publicKey': getAssertionChallenge
-                })
-                .then((newCredentialInfo) => {
+                        'publicKey': getAssertionChallenge
+                    })
+                    .then((newCredentialInfo) => {
 
-                    console.log('SUCCESS', newCredentialInfo)
-                    console.log("Sign", newCredentialInfo.response.signature)
-                    const sign = newCredentialInfo.response.signature;
-                    var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+                        console.log('SUCCESS', newCredentialInfo)
+                        console.log("Sign", newCredentialInfo.response.signature)
+                        const sign = newCredentialInfo.response.signature;
+                        var str = String.fromCharCode.apply(null, new Uint8Array(sign));
 
-                    document.getElementById('show-sign').value = "Data:" + "\n" + signData + "\n" +
-                        "sign:" + "\n" + btoa(str);
+                        document.getElementById('show-sign').value = "Data:" + "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str);
 
-                })
-                .catch((error) => {
-                    alert(error)
-                    console.log('FAIL', error)
-                })
+                    })
+                    .catch((error) => {
+                        alert(error)
+                        console.log('FAIL', error)
+                    })
 
             });
         })
