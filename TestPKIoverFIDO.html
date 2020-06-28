@@ -260,10 +260,10 @@
         // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
-        var signDataShortLength = 
+        var signDataShortLength =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVm';
-        
-        
+
+
         document.getElementById('find-index').addEventListener('submit', function (event) {
             event.preventDefault();
             var pki_buffer = [];
@@ -276,7 +276,7 @@
             //Header
             var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
 
-            var pki_header= new Uint8Array(3);
+            var pki_header = new Uint8Array(3);
 
             //PKI Command
             var command_bufer = new Uint8Array(4);
@@ -285,15 +285,15 @@
             command_bufer[1] = 0x02;
             command_bufer[2] = 01;
             command_bufer[3] = certIndex;
-          
-            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength+3+command_bufer.byteLength);
+
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_bufer.byteLength);
             var pki_payload_length = command_bufer.byteLength;
             pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
             pki_header[0] = 0xE1;
-            pki_header[1] = pki_payload_length>>8
+            pki_header[1] = pki_payload_length >> 8
             pki_header[2] = pki_payload_length;
-            pki_buffer.set(new Uint8Array(pki_header),gtheaderbuffer.byteLength);
-            pki_buffer.set(new Uint8Array(command_bufer),3+gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(command_bufer), 3 + gtheaderbuffer.byteLength);
 
             console.log(bufToHex(pki_buffer));
 
@@ -529,27 +529,28 @@
             window.crypto.getRandomValues(challenge);
 
 
-            var pki_header= new Uint8Array(3);
-            var command_bufer = new Uint8Array(ckaLabel.length+3);
+            var pki_header = new Uint8Array(3);
+            var command_bufer = new Uint8Array(ckaLabel.length + 3);
             window.crypto.getRandomValues(command_bufer);
             command_bufer[0] = 0xDF
             command_bufer[1] = 0x01;
 
             command_bufer[2] = ckaLabel.length;
-            command_bufer.set(new Uint8Array(ckaLabel.getBytes(Charsets.UTF_8)), 3);
+            command_bufer.set(toUTF8Array(ckaLabel), 3);
 
 
             var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
-            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength+pki_header.byteLength+command_bufer.byteLength);
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + pki_header.byteLength + command_bufer
+                .byteLength);
             var pki_payload_length = command_bufer.byteLength;
 
             pki_header[0] = 0xE0;
-            pki_header[1] = pki_payload_length>>8
+            pki_header[1] = pki_payload_length >> 8
             pki_header[2] = pki_payload_length;
 
-            pki_buffer.set(new Uint8Array(gtheaderbuffer),0);
-            pki_buffer.set(new Uint8Array(pki_header),gtheaderbuffer.byteLength);
-            pki_buffer.set(new Uint8Array(command_bufer), gtheaderbuffer.byteLength+pki_header.byteLength);
+            pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+            pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(command_bufer), gtheaderbuffer.byteLength + pki_header.byteLength);
 
             console.log(bufToHex(pki_buffer));
 
@@ -845,7 +846,7 @@
                     iv
                 }, pinEncKey, userpin_digestBytes.slice(0, 16));
             }).then(function (cipherPIN) { // start get assertion
-                
+
                 EncryptedPINArray = cipherPIN.slice(0, 16);
                 console.log("EncryptedPINArray", bufToHex(EncryptedPINArray.slice(0, 16)));
                 var enc = new TextEncoder();
@@ -868,16 +869,22 @@
                     .byteLength + EncryptedPINArray.byteLength +
                     ckalabel_buffer.byteLength + alg_buffer.byteLength + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-         
-                pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
-            
-                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength);
-               
-                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
- 
-                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength);
 
-                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength + alg_buffer.byteLength);
+                pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
+
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength);
+
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
+
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
+                    ckalabel_buffer.byteLength);
+
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
+                    ckalabel_buffer.byteLength + alg_buffer.byteLength);
                 console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
                 var getAssertionChallenge = {
@@ -921,6 +928,37 @@
                 return String.fromCharCode(val);
             }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
         };
+
+        function toUTF8Array(str) {
+
+            var utf8 = [];
+            for (var i = 0; i < str.length; i++) {
+                var charcode = str.charCodeAt(i);
+                if (charcode < 0x80) utf8.push(charcode);
+                else if (charcode < 0x800) {
+                    utf8.push(0xc0 | (charcode >> 6),
+                        0x80 | (charcode & 0x3f));
+                } else if (charcode < 0xd800 || charcode >= 0xe000) {
+                    utf8.push(0xe0 | (charcode >> 12),
+                        0x80 | ((charcode >> 6) & 0x3f),
+                        0x80 | (charcode & 0x3f));
+                }
+                // surrogate pair
+                else {
+                    i++;
+                    // UTF-16 encodes 0x10000-0x10FFFF by
+                    // subtracting 0x10000 and splitting the
+                    // 20 bits of 0x0-0xFFFFF into two halves
+                    charcode = 0x10000 + (((charcode & 0x3ff) << 10) |
+                        (str.charCodeAt(i) & 0x3ff));
+                    utf8.push(0xf0 | (charcode >> 18),
+                        0x80 | ((charcode >> 12) & 0x3f),
+                        0x80 | ((charcode >> 6) & 0x3f),
+                        0x80 | (charcode & 0x3f));
+                }
+            }
+            return utf8;
+        }
     </script>
 
 </body>
