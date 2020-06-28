@@ -528,15 +528,15 @@
             var challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
 
-            var pki_header= new Uint8Array(3);
 
+            var pki_header= new Uint8Array(3);
             var command_bufer = new Uint8Array(ckaLabel.length+3);
             window.crypto.getRandomValues(command_bufer);
             command_bufer[0] = 0xDF
             command_bufer[1] = 0x01;
 
             command_bufer[2] = ckaLabel.length;
-            command_bufer.set(new Uint8Array(ckaLabel), 3);
+            command_bufer.set(new Uint8Array(ckaLabel.getBytes(Charsets.UTF_8)), 3);
 
 
             var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
