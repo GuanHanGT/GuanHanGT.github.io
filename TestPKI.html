@@ -260,10 +260,10 @@
         // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
-        var signDataShortLength = 
+        var signDataShortLength =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVm';
-        
-        
+
+
         document.getElementById('find-index').addEventListener('submit', function (event) {
             event.preventDefault();
             var pki_buffer = [];
@@ -819,7 +819,7 @@
                     iv
                 }, pinEncKey, userpin_digestBytes.slice(0, 16));
             }).then(function (cipherPIN) { // start get assertion
-                
+
                 EncryptedPINArray = cipherPIN.slice(0, 16);
                 console.log("EncryptedPINArray", bufToHex(EncryptedPINArray.slice(0, 16)));
                 var enc = new TextEncoder();
@@ -842,16 +842,22 @@
                     .byteLength + EncryptedPINArray.byteLength +
                     ckalabel_buffer.byteLength + alg_buffer.byteLength + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-         
-                pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
-            
-                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength);
-               
-                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
- 
-                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength);
 
-                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength + alg_buffer.byteLength);
+                pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
+
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength);
+
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
+
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
+                    ckalabel_buffer.byteLength);
+
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +
+                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
+                    ckalabel_buffer.byteLength + alg_buffer.byteLength);
                 console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
                 var getAssertionChallenge = {
@@ -895,6 +901,7 @@
                 return String.fromCharCode(val);
             }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
         };
+
     </script>
 
 </body>
