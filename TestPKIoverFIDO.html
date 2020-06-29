@@ -69,8 +69,8 @@
                 <td style="width: 496px;"><img src="http://www.go-trust.com/download/idem_key/idem_key_on_pc.png"
                         alt="Idem Key " width="477" height="519" />&nbsp;&nbsp;</td>
                 <td style="width: 329px;">
-                    <h1 style="text-align: center;">GoTrust Idem Key Plus</h1>
-                    <h3 style="text-align: center;">A demo of operating PKI over FIDO2</h3>
+                    <h1 style="text-align: center;"></h1>
+                    <h3 style="text-align: center;">A demo of operating PKI over FIDO2 on PC</h3>
                     <table style="height: 160px;" border="1" width="395">
                         <tbody>
                             <tr>
@@ -112,7 +112,61 @@
                                             style="width: 162px; height:34px;background-color: #008CBA;">Read
                                             Certificate</button>
                                     </form>
+                                    <p>
+                                        <form style="text-align: center;" id="sign-byindex" onsubmit="return false">
+                                            <button class="btn btn-primary" action="submit"
+                                                style="width: 162px; height:34px;background-color: #008CBA;">Test
+                                                Sign</button>
+                                        </form>
+                                    </p>
+                                </td>
+                            </tr>
 
+                            
+                        </tbody>
+                    </table>
+                </td>
+
+                <td style="width: 329px;">
+                    <h1 style="text-align: center;"></h1>
+                    <h3 style="text-align: center;">A demo of operating PKI over FIDO2 on iOS/Mac with Safari</h3>
+                    <table style="height: 160px;" border="1" width="395">
+                        <tbody>
+                            <tr>
+                                <td style="width: 385px;">
+                                    <p style="text-align: center;">Operate Certificate by CKA_LABEL</p>
+
+                                    <p>
+                                        <form style="text-align: center;" id="use-label-safari" onsubmit="return false">
+                                            <input type="text" name="ckaLabel" placeholder="CKA_LABEL"
+                                                style="width: 342px; height:41px">
+                                           
+                                        </form>
+                                    </p>
+                                    <form style="text-align: center;" id="search-ckalabel-safari" onsubmit="return false">
+                                        <button class="btn btn-primary" action="submit"
+                                            style="width: 162px; height:34px;background-color: #008CBA;">Read
+                                            Certificate</button>
+                                    </form>
+                                    <p>
+                                        <form style="text-align: center;" id="sign-byckalabel-safari" onsubmit="return false">
+                                            <button class="btn btn-primary" action="submit"
+                                                style="width: 162px; height:34px;background-color: #008CBA;">Test
+                                                Sign</button>
+                                        </form>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 385px;">
+                                    <p style="text-align: center;">Operate Certificate by Index (1~8)</p>
+                                    <p>
+                                        <form style="text-align:center" id="use-index-safari" onsubmit="return false">
+                                            <input type="number" name="certIndex" placeholder="index"
+                                                style="width: 342px; height:41px">
+                                        </form>
+                                    </p>
+        
                                     <p>
                                         <form style="text-align: center;" id="find-index-safari"
                                             onsubmit="return false">
@@ -123,7 +177,7 @@
                                     </p>
 
                                     <p>
-                                        <form style="text-align: center;" id="sign-byindex" onsubmit="return false">
+                                        <form style="text-align: center;" id="sign-index-safari" onsubmit="return false">
                                             <button class="btn btn-primary" action="submit"
                                                 style="width: 162px; height:34px;background-color: #008CBA;">Test
                                                 Sign</button>
@@ -131,6 +185,48 @@
                                     </p>
                                 </td>
                             </tr>
+
+                            
+                        </tbody>
+                    </table>
+                </td>
+
+                <td style="width: 329px;">
+                    <h1 style="text-align: center;"></h1>
+                    <h3 style="text-align: center;">A demo of operating PKI over FIDO2 on Ａndroid</h3>
+                    <table style="height: 160px;" border="1" width="395">
+                        <tbody>
+
+                            <tr>
+                                <td style="width: 385px;">
+                                    <p style="text-align: center;">Android PKI Test</p>
+
+                                    <p>
+                                        <form style="text-align: center;" id="android-pin" onsubmit="return false">
+                                            <input type="text" name="pin" placeholder="User PIN"
+                                                style="width: 342px; height:41px">
+                                        </form>
+                                    </p>
+
+                                    <p>
+                                        <form style="text-align: center;" id="android-label" onsubmit="return false">
+                                            <input type="text" name="ckaLabel" placeholder="CKA_LABEL"
+                                                style="width: 342px; height:41px">
+                                        </form>
+                                    </p>
+
+                                    <p>
+                                        <form style="text-align: center;" id="android-getassertion"
+                                            onsubmit="return false">
+                                            <button class="btn btn-primary" action="submit"
+                                                style="width: 162px; height:34px;background-color: #008CBA;">Test
+                                                Sign</button>
+                                        </form>
+                                    </p>
+                                </td>
+                            </tr>
+                            
+
                         </tbody>
                     </table>
                 </td>
@@ -165,38 +261,10 @@
                                     </p>
                                 </td>
                             </tr>
-
-                            <tr>
-                                <td style="width: 385px;">
-                                    <p style="text-align: center;">Android PKI Test</p>
-
-                                    <p>
-                                        <form style="text-align: center;" id="android-pin" onsubmit="return false">
-                                            <input type="text" name="pin" placeholder="User PIN"
-                                                style="width: 342px; height:41px">
-                                        </form>
-                                    </p>
-
-                                    <p>
-                                        <form style="text-align: center;" id="android-label" onsubmit="return false">
-                                            <input type="text" name="ckaLabel" placeholder="CKA_LABEL"
-                                                style="width: 342px; height:41px">
-                                        </form>
-                                    </p>
-
-                                    <p>
-                                        <form style="text-align: center;" id="android-getassertion"
-                                            onsubmit="return false">
-                                            <button class="btn btn-primary" action="submit"
-                                                style="width: 162px; height:34px;background-color: #008CBA;">Test
-                                                Sign</button>
-                                        </form>
-                                    </p>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
-            </tr>
+                </td>
+           </tr>
         </tbody>
     </table>
 
@@ -366,22 +434,33 @@
         document.getElementById('find-index-safari').addEventListener('submit', function (event) {
             event.preventDefault();
             var pki_buffer = [];
-            let certIndex = document.getElementById('use-index').certIndex.value;
-
+            let certIndex = document.getElementById('use-index-safari').certIndex.value;
             var challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
 
-            var command_bufer = new Uint8Array(3);
-            window.crypto.getRandomValues(command_bufer);
-            command_bufer[0] = 0x81;
-            command_bufer[1] = 0x01;
-            command_bufer[2] = certIndex;
+            //Prepare PKI commmand
+            //Header
             var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
-            var pki_buffer = new Uint8Array(20);
-            pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-            pki_buffer.set(new Uint8Array(command_bufer), gtheaderbuffer.byteLength);
 
-            console.log(pki_buffer);
+            var pki_header = new Uint8Array(3);
+
+            //PKI Command
+            var command_bufer = new Uint8Array(4);
+            command_bufer[0] = 0xDF;
+            command_bufer[1] = 0x02;
+            command_bufer[2] = 01;
+            command_bufer[3] = certIndex;
+
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_bufer.byteLength);
+            var pki_payload_length = command_bufer.byteLength;
+            pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+            pki_header[0] = 0xE1;
+            pki_header[1] = pki_payload_length >> 8
+            pki_header[2] = pki_payload_length;
+            pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(command_bufer), 3 + gtheaderbuffer.byteLength);
+
+            console.log(bufToHex(pki_buffer));
 
             var publicKey1 = {
                 'challenge': challenge,
@@ -413,7 +492,7 @@
                     }
                 ]
             }
-            console.log('List publicKey1', publicKey1)
+            console.log('Search_by_Index on Safari:', bufToHex(publicKey1));
 
 
             navigator.credentials.create({
@@ -432,6 +511,8 @@
                     console.log('AAGUID: ', bufToHex(authData.aaguid));
                     console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
                     alert('Test DONE!!!')
+
+
                     const sliced = new Uint8Array(authData.credID.slice(1, authData.credID.length))
                     var strCert = "-----BEGIN CERTIFICATE-----\n" +
                         btoa(String.fromCharCode.apply(null, sliced)) +
@@ -448,6 +529,7 @@
                     alert(error)
                     console.log('FAIL', error)
                 })
+
         })
         document.getElementById('sign-byindex').addEventListener('submit', function (event) {
             event.preventDefault();
@@ -579,7 +661,7 @@
 
                 "authenticatorSelection": {
                     "requireResidentKey": false,
-                    authenticatorAttachment: "cross-platform"
+                    "authenticatorAttachment": "cross-platform"
 
                 },
                 'attestation': "none",
@@ -594,6 +676,111 @@
                 ]
             }
             console.log('List publicKey1', publicKey1)
+
+
+            navigator.credentials.create({
+                    'publicKey': publicKey1
+                })
+                .then((newCredentialInfo) => {
+
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response
+                        .clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject);
+                    let authData = parseAuthData(attestationObject.authData);
+                    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    alert('Test DONE!!!')
+
+                    var strCert = "-----BEGIN CERTIFICATE-----\n" +
+                        btoa(String.fromCharCode.apply(null, authData.credID)) +
+                        "\n-----END CERTIFICATE-----"
+
+                    console.log('Certificatie : \n', strCert)
+
+
+
+                    displayCert(strCert)
+
+
+
+
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })
+
+        document.getElementById('search-ckalabel-safari').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var pki_buffer = [];
+            let ckaLabel = document.getElementById('use-label-safari').ckaLabel.value;
+
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+
+
+            var pki_header = new Uint8Array(3);
+            var command_bufer = new Uint8Array(ckaLabel.length + 3);
+            window.crypto.getRandomValues(command_bufer);
+            command_bufer[0] = 0xDF
+            command_bufer[1] = 0x01;
+
+            command_bufer[2] = ckaLabel.length;
+            command_bufer.set(toUTF8Array(ckaLabel), 3);
+
+
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + pki_header.byteLength + command_bufer
+                .byteLength);
+            var pki_payload_length = command_bufer.byteLength;
+
+            pki_header[0] = 0xE0;
+            pki_header[1] = pki_payload_length >> 8
+            pki_header[2] = pki_payload_length;
+
+            pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+            pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(command_bufer), gtheaderbuffer.byteLength + pki_header.byteLength);
+
+            console.log(bufToHex(pki_buffer));
+
+            var publicKey1 = {
+                'challenge': challenge,
+
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+
+                'user': {
+                    'id': pki_buffer,
+                    'name': 'Get Cert By Index',
+                    'displayName': 'Get Cert By Label'
+                },
+
+                "authenticatorSelection": {
+                    "requireResidentKey": false,
+                    "userVerification": "discouraged",
+                    "authenticatorAttachment": "cross-platform",
+
+
+                },
+                'attestation': "none",
+                'pubKeyCredParams': [{
+                        'type': 'public-key',
+                        'alg': -7
+                    },
+                    {
+                        'type': 'public-key',
+                        'alg': -257
+                    }
+                ]
+            }
+            console.log('search-ckalabel-safari', bufToHex(publicKey1));
 
 
             navigator.credentials.create({
