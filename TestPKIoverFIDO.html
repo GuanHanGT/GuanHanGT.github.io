@@ -660,7 +660,7 @@
             alg_buf[3] = 0x02;
 
             var signDataPayload = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
-            var signDataBuf = new Uint8Array(3 + signDataArray.byteLength);
+            var signDataBuf = new Uint8Array(3 + signDataPayload.byteLength);
             signDataBuf[0] = 0xDF;
             signDataBuf[1] = 0x06;
             signDataBuf[2] = signDataPayload.length;
