@@ -143,13 +143,21 @@
                                            
                                         </form>
                                     </p>
+
+                                    <p>
+                                        <form style="text-align: center;" id="safari-pin-label" onsubmit="return false">
+                                            <input type="text" name="pin" placeholder="User PIN"
+                                                style="width: 342px; height:41px">
+                                        </form>
+                                    </p>
+
                                     <form style="text-align: center;" id="search-ckalabel-safari" onsubmit="return false">
                                         <button class="btn btn-primary" action="submit"
                                             style="width: 162px; height:34px;background-color: #008CBA;">Read
                                             Certificate</button>
                                     </form>
                                     <p>
-                                        <form style="text-align: center;" id="sign-byckalabel-safari" onsubmit="return false">
+                                        <form style="text-align: center;" id="sign-ckalabel-safari" onsubmit="return false">
                                             <button class="btn btn-primary" action="submit"
                                                 style="width: 162px; height:34px;background-color: #008CBA;">Test
                                                 Sign</button>
@@ -168,7 +176,7 @@
                                     </p>
 
                                     <p>
-                                        <form style="text-align: center;" id="safari-pin" onsubmit="return false">
+                                        <form style="text-align: center;" id="safari-pin-index" onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
@@ -177,8 +185,7 @@
                                         <form style="text-align: center;" id="find-index-safari"
                                             onsubmit="return false">
                                             <button class="btn btn-primary" action="submit"
-                                                style="width: 162px; height:34px;background-color: #008CBA;">Read
-                                                CertOnSafari</button>
+                                                style="width: 162px; height:34px;background-color: #008CBA;">Read Certificate</button>
                                         </form>
                                     </p>
 
@@ -1146,11 +1153,11 @@
 
  
             let certIndex = document.getElementById('use-index-safari').certIndex.value;
-            let userpin = document.getElementById('safari-pin').pin.value;
+            let userpin = document.getElementById('safari-pin-index').pin.value;
 
 
             console.log('use-index-safari', certIndex);
-            console.log('safari-pin', userpin);
+            console.log('safari-pin-index', userpin);
 
             var challenge = new Uint8Array(32);
             window.crypto.getRandomValues(challenge);
@@ -1438,6 +1445,308 @@
             }
             return utf8;
         }
+
+        document.getElementById('sign-ckalabel-safari').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+ 
+            let ckalabel = document.getElementById('use-label-safari').certIndex.value;
+            let userpin = document.getElementById('safari-pin-label').pin.value;
+
+
+            console.log('use-label-safari', ckalabel);
+            console.log('safari-pin-label', userpin);
+
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            var challenge = new Uint8Array(32);
+            var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
+            var id = Uint8Array.from(window.atob(userID), c => c.charCodeAt(0));
+            var local_privateKey;
+            var local_privateKey;
+            var externalECPublicKey;
+            var exportECPublicKeyArray;
+            var pinEncKey;
+            var EncryptedPINArray;
+            var safari_readecdh = {
+                'challenge': challenge,
+
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+
+                'user': {
+                    'id': id,
+                    'name': 'alice@example.com',
+                    'displayName': 'Alice von Wunderland'
+                },
+
+                "authenticatorSelection": {
+                    "userVerification": "discouraged",
+                    "requireResidentKey": false,
+                    "authenticatorAttachment": "cross-platform"
+
+                },
+                'attestation': "direct",
+                'pubKeyCredParams': [{
+                        'type': 'public-key',
+                        'alg': -7
+                    },
+                    {
+                        'type': 'public-key',
+                        'alg': -257
+                    }
+                ]
+            }
+            console.log('Get ECDH Key', safari_readecdh);
+
+            navigator.credentials.create({
+                'publicKey': safari_readecdh
+            }).then((newCredentialInfo) => {
+
+                let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                let authData = parseAuthData(attestationObject.authData);
+                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
+                console.log('X point: ', bufToHex(Object.values(publicKEy)[3]));
+                console.log('Y point: ', bufToHex(Object.values(publicKEy)[4]));
+
+                var externalECPublicKeyX = base64EncodeURL(Object.values(publicKEy)[3]);
+                var externalECPublicKeyY = base64EncodeURL(Object.values(publicKEy)[4]);
+                console.log("externalECPublicKeyX ", externalECPublicKeyX);
+                console.log("externalECPublicKeyY", externalECPublicKeyY);
+
+                alert('Get ECDH public Key');
+
+                return window.crypto.subtle.importKey(
+                    "jwk", //can be "jwk" (public or private), "raw" (public only), "spki" (public only), or "pkcs8" (private only)
+                    { //this is an example jwk key, other key types are Uint8Array objects
+                        kty: "EC",
+                        crv: "P-256",
+                        x: externalECPublicKeyX,
+                        y: externalECPublicKeyY,
+                        ext: true,
+                    }, { //these are the algorithm options
+                        name: "ECDH",
+                        namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
+                    },
+                    true, //whether the key is extractable (i.e. can be used in exportKey)
+                    [] //"deriveKey" and/or "deriveBits" for private keys only (just put an empty list if importing a public key)
+                );
+
+            }).then(function (external_public) {
+                //returns a privateKey (or publicKey if you are importing a public key)
+                externalECPublicKey = external_public;
+                console.log("external_public", externalECPublicKey);
+                return window.crypto.subtle.generateKey({
+                        name: "ECDH",
+                        namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
+                    },
+                    true, //whether the key is extractable (i.e. can be used in exportKey)
+                    ["deriveKey",
+                        "deriveBits"
+                    ] //can be any combination of "deriveKey" and "deriveBits"
+                );
+            }).then(function (key) { //generate ecdh pair
+
+                local_publicKey = key.publicKey;
+                local_privateKey = key.privateKey;
+
+
+                window.crypto.subtle.exportKey("raw", local_publicKey).then(
+                    function (keydata) {
+                        exportECPublicKeyArray = keydata;
+                        console.log("exportECPublicKeyArray", bufToHex(exportECPublicKeyArray));
+                    }
+                );
+
+
+                return window.crypto.subtle.deriveBits({
+                        name: "ECDH",
+                        namedCurve: "P-256", //can be "P-256", "P-384", or "P-521"
+                        public: externalECPublicKey, //an ECDH public key from generateKey or importKey
+
+                    },
+                    local_privateKey, //from generateKey or importKey above
+                    256 //the number of bits you want to derive
+                );
+
+            }).then(function (keybits) { //convert share secret to pinEncKey
+                return crypto.subtle.digest(
+                    "SHA-256",
+                    new Uint8Array(keybits)
+                );
+            }).then(function (pinEncKeyBytes) {
+                console.log("pinEncKeyBytes", bufToHex(pinEncKeyBytes));
+                return crypto.subtle.importKey("raw",
+                    pinEncKeyBytes,
+                    "aes-cbc", false, ["encrypt"]);
+
+            }).then(function (importKey) {
+                pinEncKey = importKey;
+                console.log("pinEncKey ", pinEncKey);
+                const encoder = new TextEncoder();
+                const data = encoder.encode(userpin);
+                return crypto.subtle.digest(
+                    "SHA-256",
+                    data);
+            }).then(function (userpin_digestBytes) {
+                console.log("userpin_digestBytes", bufToHex(userpin_digestBytes.slice(0, 16)));
+                var iv = new Uint8Array(16);
+                console.log("iv .... ", iv);
+
+                return crypto.subtle.encrypt({
+                    name: "aes-cbc",
+                    iv
+                }, pinEncKey, userpin_digestBytes.slice(0, 16));
+            }).then(function (cipherPIN) { // start get assertion
+
+                EncryptedPINArray = cipherPIN.slice(0, 16);
+
+                console.log("EncryptedPINArray", bufToHex(EncryptedPINArray.slice(0, 16)));
+                var enc = new TextEncoder();
+                var pki_buffer = [];
+                var challenge = new Uint8Array(32);
+                window.crypto.getRandomValues(challenge);
+                var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
+
+
+
+            var pki_buffer = [];
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge);
+            var gtheaderbuffer = Uint8Array.from(window.atob(GTheader), c => c.charCodeAt(0));
+
+            var pki_header = new Uint8Array(3);
+
+            //PKI Command
+            var command_bufer = new Uint8Array(ckaLabel.length + 3);
+            window.crypto.getRandomValues(command_bufer);
+            command_bufer[0] = 0xDF
+            command_bufer[1] = 0x01;
+            command_bufer[2] = ckaLabel.length;
+            command_bufer.set(toUTF8Array(ckaLabel), 3);
+
+
+
+            var alg_buf = new Uint8Array(4);
+            alg_buf[0] = 0xDF;
+            alg_buf[1] = 0x03;
+            alg_buf[2] = 01;
+            alg_buf[3] = 0x02;
+
+
+            var ecpubkey_buf = new Uint8Array(3+exportECPublicKeyArray.byteLength);
+            ecpubkey_buf[0] = 0xDF;
+            ecpubkey_buf[1] = 0x04;
+            ecpubkey_buf[2] = exportECPublicKeyArray.byteLength;
+            ecpubkey_buf.set(new Uint8Array(exportECPublicKeyArray),3);
+
+
+            var encryptedPIN_buf = new Uint8Array(3+EncryptedPINArray.byteLength);
+            encryptedPIN_buf[0] = 0xDF;
+            encryptedPIN_buf[1] = 0x05;
+            encryptedPIN_buf[2] = EncryptedPINArray.byteLength;
+            encryptedPIN_buf.set(new Uint8Array(EncryptedPINArray),3);
+
+            var signDataPayload = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
+            var signDataBuf = new Uint8Array(3 + signDataPayload.byteLength);
+            signDataBuf[0] = 0xDF;
+            signDataBuf[1] = 0x06;
+            signDataBuf[2] = signDataPayload.length;
+            signDataBuf.set(signDataPayload, 3);
+
+
+
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_buf.byteLength + alg_buf
+                .byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength+signDataBuf.byteLength);
+            var pki_payload_length = command_buf.byteLength + alg_buf.byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength+signDataBuf.byteLength;
+            pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
+            pki_header[0] = 0xE5;
+            pki_header[1] = pki_payload_length >> 8
+            pki_header[2] = pki_payload_length;
+            pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
+            pki_buffer.set(new Uint8Array(command_buf), gtheaderbuffer.byteLength + 3);
+            pki_buffer.set(new Uint8Array(alg_buf), gtheaderbuffer.byteLength + 3 + command_buf.byteLength);
+            pki_buffer.set(new Uint8Array(ecpubkey_buf), gtheaderbuffer.byteLength + 3 + command_buf.byteLength+alg_buf.byteLength);
+            pki_buffer.set(new Uint8Array(encryptedPIN_buf), gtheaderbuffer.byteLength + 3 + command_buf.byteLength+alg_buf.byteLength + ecpubkey_buf.byteLength);
+            pki_buffer.set(new Uint8Array(signDataBuf), gtheaderbuffer.byteLength + 3 + command_buf.byteLength + alg_buf.byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength);
+
+                console.log("sign-ckalabel-safari: " + bufToHex(pki_buffer));
+
+                var getAssertionChallenge = {
+                    'challenge': challenge,
+                    "userVerification": "discouraged"
+                }
+                var idList = [{
+                    id: pki_buffer,
+                    transports: ["usb", "nfc", "ble"],
+                    type: "public-key"
+                }];
+
+                getAssertionChallenge.allowCredentials = idList;
+                console.log('List getAssertionChallenge', getAssertionChallenge)
+
+                navigator.credentials.get({
+                        'publicKey': getAssertionChallenge
+                    })
+                    .then((newCredentialInfo) => {
+
+                        console.log('SUCCESS', newCredentialInfo)
+                        console.log("Sign", newCredentialInfo.response.signature)
+                        const sign = newCredentialInfo.response.signature;
+                        var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+
+                        document.getElementById('show-sign').value = "Data:" + "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str);
+
+                    })
+                    .catch((error) => {
+                        alert(error)
+                        console.log('FAIL', error)
+                    })
+
+            });
+        })
+
+
+        function base64EncodeURL(byteArray) {
+            return btoa(Array.from(new Uint8Array(byteArray)).map(val => {
+                return String.fromCharCode(val);
+            }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
+        };
+
+        function toUTF8Array(str) {
+
+            var utf8 = [];
+            for (var i = 0; i < str.length; i++) {
+                var charcode = str.charCodeAt(i);
+                if (charcode < 0x80) utf8.push(charcode);
+                else if (charcode < 0x800) {
+                    utf8.push(0xc0 | (charcode >> 6),
+                        0x80 | (charcode & 0x3f));
+                } else if (charcode < 0xd800 || charcode >= 0xe000) {
+                    utf8.push(0xe0 | (charcode >> 12),
+                        0x80 | ((charcode >> 6) & 0x3f),
+                        0x80 | (charcode & 0x3f));
+                }
+                // surrogate pair
+                else {
+                    i++;
+                    // UTF-16 encodes 0x10000-0x10FFFF by
+                    // subtracting 0x10000 and splitting the
+                    // 20 bits of 0x0-0xFFFFF into two halves
+                    charcode = 0x10000 + (((charcode & 0x3ff) << 10) |
+                        (str.charCodeAt(i) & 0x3ff));
+                    utf8.push(0xf0 | (charcode >> 18),
+                        0x80 | ((charcode >> 12) & 0x3f),
+                        0x80 | ((charcode >> 6) & 0x3f),
+                        0x80 | (charcode & 0x3f));
+                }
+            }
+            return utf8;
+        }
+
     </script>
 
 </body>
