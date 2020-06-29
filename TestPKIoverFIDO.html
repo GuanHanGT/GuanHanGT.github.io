@@ -462,10 +462,10 @@
 
             //PKI Command
             var command_buf = new Uint8Array(4);
-            command_bufer[0] = 0xDF;
-            command_bufer[1] = 0x02;
-            command_bufer[2] = 01;
-            command_bufer[3] = certIndex;
+            command_buf[0] = 0xDF;
+            command_buf[1] = 0x02;
+            command_buf[2] = 01;
+            command_buf[3] = certIndex;
 
             var alg_buf = new Uint8Array(4);
             alg_buf[0] = 0xDF;
@@ -481,20 +481,20 @@
             signDataBuf.set(signDataPayload, 3);
 
 
-            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_bufer.byteLength + alg_buf
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_buf.byteLength + alg_buf
                 .byteLength + signDataBuf.byteLength);
-            var pki_payload_length = command_bufer.byteLength + alg_buf.byteLength + signDataBuf.byteLength;
+            var pki_payload_length = command_buf.byteLength + alg_buf.byteLength + signDataBuf.byteLength;
             pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
             pki_header[0] = 0xE3;
             pki_header[1] = pki_payload_length >> 8
             pki_header[2] = pki_payload_length;
             pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
-            pki_buffer.set(new Uint8Array(command_bufer), gtheaderbuffer.byteLength + 3);
-            pki_buffer.set(new Uint8Array(alg_buf), gtheaderbuffer.byteLength + 3 + command_bufer.byteLength);
-            pki_buffer.set(new Uint8Array(signDataBuf), gtheaderbuffer.byteLength + 3 + command_bufer
+            pki_buffer.set(new Uint8Array(command_buf), gtheaderbuffer.byteLength + 3);
+            pki_buffer.set(new Uint8Array(alg_buf), gtheaderbuffer.byteLength + 3 + command_buf.byteLength);
+            pki_buffer.set(new Uint8Array(signDataBuf), gtheaderbuffer.byteLength + 3 + command_buf
                 .byteLength + alg_buf.byteLength);
 
-            console.log(bufToHex(pki_buffer));
+            console.log("sign-byindex",bufToHex(pki_buffer));
             var getAssertionChallenge = {
                 'challenge': challenge,
             }
