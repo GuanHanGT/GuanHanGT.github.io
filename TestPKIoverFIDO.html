@@ -1619,12 +1619,11 @@
             var pki_header = new Uint8Array(3);
 
             //PKI Command
-            var command_bufer = new Uint8Array(ckaLabel.length + 3);
-            window.crypto.getRandomValues(command_bufer);
-            command_bufer[0] = 0xDF
-            command_bufer[1] = 0x01;
-            command_bufer[2] = ckaLabel.length;
-            command_bufer.set(toUTF8Array(ckaLabel), 3);
+            var command_buf = new Uint8Array(ckaLabel.length + 3);
+            command_buf[0] = 0xDF
+            command_buf[1] = 0x01;
+            command_buf[2] = ckaLabel.length;
+            command_buf.set(toUTF8Array(ckaLabel), 3);
 
 
 
@@ -1657,8 +1656,7 @@
 
 
 
-            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_buf.byteLength + alg_buf
-                .byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength+signDataBuf.byteLength);
+            var pki_buffer = new Uint8Array(gtheaderbuffer.byteLength + 3 + command_buf.byteLength + alg_buf.byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength+signDataBuf.byteLength);
             var pki_payload_length = command_buf.byteLength + alg_buf.byteLength + ecpubkey_buf.byteLength+encryptedPIN_buf.byteLength+signDataBuf.byteLength;
             pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
             pki_header[0] = 0xE5;
