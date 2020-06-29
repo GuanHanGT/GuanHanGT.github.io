@@ -1331,14 +1331,14 @@
             ecpubkey_buf[0] = 0xDF;
             ecpubkey_buf[1] = 0x04;
             ecpubkey_buf[2] = exportECPublicKeyArray.byteLength;
-            ecpubkey_buf.set(exportECPublicKeyArray,3);
+            ecpubkey_buf.set(new Uint8Array(exportECPublicKeyArray),3);
 
 
             var encryptedPIN_buf = new Uint8Array(3+EncryptedPINArray.byteLength);
             encryptedPIN_buf[0] = 0xDF;
             encryptedPIN_buf[1] = 0x05;
             encryptedPIN_buf[2] = EncryptedPINArray.byteLength;
-            encryptedPIN_buf.set(EncryptedPINArray,3);
+            encryptedPIN_buf.set(new Uint8Array(EncryptedPINArray),3);
 
             var signDataPayload = Uint8Array.from(window.atob(signData), c => c.charCodeAt(0));
             var signDataBuf = new Uint8Array(3 + signDataPayload.byteLength);
