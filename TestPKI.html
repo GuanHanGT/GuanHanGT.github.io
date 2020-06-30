@@ -260,10 +260,10 @@
         // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
-        var signDataShortLength =
+        var signDataShortLength = 
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVm';
-
-
+        
+        
         document.getElementById('find-index').addEventListener('submit', function (event) {
             event.preventDefault();
             var pki_buffer = [];
@@ -819,7 +819,7 @@
                     iv
                 }, pinEncKey, userpin_digestBytes.slice(0, 16));
             }).then(function (cipherPIN) { // start get assertion
-
+                
                 EncryptedPINArray = cipherPIN.slice(0, 16);
                 console.log("EncryptedPINArray", bufToHex(EncryptedPINArray.slice(0, 16)));
                 var enc = new TextEncoder();
@@ -842,22 +842,16 @@
                     .byteLength + EncryptedPINArray.byteLength +
                     ckalabel_buffer.byteLength + alg_buffer.byteLength + signDataBuffer.byteLength);
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-
+         
                 pki_buffer.set(new Uint8Array(exportECPublicKeyArray), gtheaderbuffer.byteLength);
+            
+                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength);
+               
+                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength + exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
+ 
+                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength);
 
-                pki_buffer.set(new Uint8Array(EncryptedPINArray), gtheaderbuffer.byteLength +
-                    exportECPublicKeyArray.byteLength);
-
-                pki_buffer.set(new Uint8Array(ckalabel_buffer), gtheaderbuffer.byteLength +
-                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength);
-
-                pki_buffer.set(new Uint8Array(alg_buffer), gtheaderbuffer.byteLength +
-                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
-                    ckalabel_buffer.byteLength);
-
-                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +
-                    exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength +
-                    ckalabel_buffer.byteLength + alg_buffer.byteLength);
+                pki_buffer.set(new Uint8Array(signDataBuffer), gtheaderbuffer.byteLength +exportECPublicKeyArray.byteLength + EncryptedPINArray.byteLength + ckalabel_buffer.byteLength + alg_buffer.byteLength);
                 console.log("6.pki_buffer:" + bufToHex(pki_buffer));
 
                 var getAssertionChallenge = {
@@ -896,12 +890,81 @@
             });
         })
 
+        document.getElementById('do-makecredential').addEventListener('submit', function(event) {
+            event.preventDefault();
+        
+            var challenge = new Uint8Array(32);
+            window.crypto.getRandomValues(challenge); 
+            var challenge = new Uint8Array(32);
+	    var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
+            var id = Uint8Array.from(window.atob(userID), c=>c.charCodeAt(0))
+            var uv = document.getElementById('userVerification').value;
+		
+	    var publicKey1 = {
+                'challenge': challenge,
+                'rp': {
+                    'name': 'GoTrustID Inc.',
+                },
+                
+                'user': {
+                    'id': id,
+                    'name': 'alice@example.com',
+                    'displayName': 'Alice von Wunderland'
+                },
+               
+                "authenticatorSelection": {
+                     "userVerification": uv,
+                    "requireResidentKey": false,
+                    "authenticatorAttachment": "cross-platform"	
+                    
+                },
+                'attestation': "direct",
+                'pubKeyCredParams': [
+                    { 'type': 'public-key', 'alg': -7  },
+                    { 'type': 'public-key', 'alg': -257 }
+                ]
+            }
+            console.log('List publicKey1', publicKey1)
+            
+            
+            navigator.credentials.create({ 'publicKey': publicKey1 })
+                .then((newCredentialInfo) => {
+                    
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log('ClientDataJSON: ', bufferToString(newCredentialInfo.response.clientDataJSON))
+                    let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
+                    console.log('AttestationObject: ', attestationObject);
+		    let authData = parseAuthData(attestationObject.authData);
+		    console.log('AuthData: ', authData);
+                    console.log('CredID: ', bufToHex(authData.credID));
+                    console.log('AAGUID: ', bufToHex(authData.aaguid));
+                    console.log('PublicKey', CBOR.decode(authData.COSEPublicKey.buffer));
+                    alert('Test DONE!!!');
+   		
+		    
+		    document.getElementById('show-sign').value = "MakeCredential=> AttestationObject:"+"\n"+
+			                                         "fmt: "+attestationObject.fmt+"\n"+
+		    						 "counter: "+ authData.counter+"\n"+
+			                                         "CredID: "+ bufToHex(authData.credID)+"\n"+
+		                                                 "x5c: "+ btoa(String.fromCharCode.apply(null, attestationObject.attStmt.x5c[0]))+"\n"
+		               ;	
+		              
+		    
+                   
+    
+                
+                })
+                .catch((error) => {
+                    alert(error)
+                    console.log('FAIL', error)
+                })
+        })    
+        
         function base64EncodeURL(byteArray) {
             return btoa(Array.from(new Uint8Array(byteArray)).map(val => {
                 return String.fromCharCode(val);
             }).join('')).replace(/\+/g, '-').replace(/\//g, '_').replace(/\=/g, '');
         };
-
     </script>
 
 </body>
