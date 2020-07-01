@@ -135,7 +135,8 @@
                                     <p style="text-align: center;">Operate Certificate by CKA_LABEL</p>
 
                                     <p>
-                                        <form style="text-align: center;" id="android-ckalabel-pin" onsubmit="return false">
+                                        <form style="text-align: center;" id="android-ckalabel-pin"
+                                            onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
@@ -164,7 +165,8 @@
                                     <p style="text-align: center;">Operate Certificate by Index (1~8)</p>
 
                                     <p>
-                                        <form style="text-align: center;" id="android-index-pin" onsubmit="return false">
+                                        <form style="text-align: center;" id="android-index-pin"
+                                            onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
@@ -342,7 +344,7 @@
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
         //    1234567890abcdef1234567890abcdef
-        var signShortData ='MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
+        var signShortData = 'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
 
 
         document.getElementById('find-index').addEventListener('submit', function (event) {
@@ -1403,33 +1405,37 @@
                 console.log('List getAssertionChallenge', getAssertionChallenge)
 
                 navigator.credentials.get({
-                        'publicKey': getAssertionChallenge
-                    }).then((newCredentialInfo) => {
+                    'publicKey': getAssertionChallenge
+                }).then((newCredentialInfo) => {
 
-                        alert('Sign finished');
-                        console.log('SUCCESS', newCredentialInfo)
-                        console.log("Sign", newCredentialInfo.response.signature)
-                        const sign = newCredentialInfo.response.signature;
+                    alert('Sign finished');
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log("Sign", newCredentialInfo.response.signature)
+                    const sign = newCredentialInfo.response.signature;
 
-
+                    if (sign.byteLength < 256) {
                         navigator.credentials.get({
-                            'publicKey': getAssertionChallenge
-                        }) .then((newCredentialInfo) => {
+                                'publicKey': getAssertionChallenge
+                            }).then((newCredentialInfo) => {
 
-                            alert('Sign finished');
-                            console.log('SUCCESS', newCredentialInfo)
-                            console.log("Sign", newCredentialInfo.response.signature)
-                            const sign = newCredentialInfo.response.signature;
-                            var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+                                alert('Sign finished');
+                                console.log('SUCCESS', newCredentialInfo)
+                                console.log("Sign", newCredentialInfo.response.signature)
+                                const sign = newCredentialInfo.response.signature;
+                                var str = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign));
 
-                            document.getElementById('show-sign').value = "Data:" + "\n" + signData +
-                                "\n" +
-                                "sign:" + "\n" + btoa(str);
-                    })
-                    .catch((error) => {
-                        alert(error)
-                        console.log('FAIL', error)
-                    })
+                                document.getElementById('show-sign').value = "Data:" +
+                                    "\n" + signData +
+                                    "\n" +
+                                    "sign:" + "\n" + btoa(str);
+                            })
+                            .catch((error) => {
+                                alert(error)
+                                console.log('FAIL', error)
+                            })
+                    }
+
                 });
 
             });
@@ -1700,33 +1706,37 @@
                 console.log('List getAssertionChallenge', getAssertionChallenge)
 
                 navigator.credentials.get({
-                        'publicKey': getAssertionChallenge
-                    }).then((newCredentialInfo) => {
+                    'publicKey': getAssertionChallenge
+                }).then((newCredentialInfo) => {
 
-                        alert('Sign finished');
-                        console.log('SUCCESS', newCredentialInfo)
-                        console.log("Sign", newCredentialInfo.response.signature)
-                        const sign = newCredentialInfo.response.signature;
+                    alert('Sign finished');
+                    console.log('SUCCESS', newCredentialInfo)
+                    console.log("Sign", newCredentialInfo.response.signature)
+                    const sign = newCredentialInfo.response.signature;
 
-
+                    if (sign.byteLength < 256) {
                         navigator.credentials.get({
-                            'publicKey': getAssertionChallenge
-                        }) .then((newCredentialInfo) => {
+                                'publicKey': getAssertionChallenge
+                            }).then((newCredentialInfo) => {
 
-                            alert('Sign finished');
-                            console.log('SUCCESS', newCredentialInfo)
-                            console.log("Sign", newCredentialInfo.response.signature)
-                            const sign = newCredentialInfo.response.signature;
-                            var str = String.fromCharCode.apply(null, new Uint8Array(sign));
+                                alert('Sign finished');
+                                console.log('SUCCESS', newCredentialInfo)
+                                console.log("Sign", newCredentialInfo.response.signature)
+                                const sign = newCredentialInfo.response.signature;
+                                var str = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign));
 
-                            document.getElementById('show-sign').value = "Data:" + "\n" + signData +
-                                "\n" +
-                                "sign:" + "\n" + btoa(str);
-                    })
-                    .catch((error) => {
-                        alert(error)
-                        console.log('FAIL', error)
-                    })
+                                document.getElementById('show-sign').value = "Data:" +
+                                    "\n" + signData +
+                                    "\n" +
+                                    "sign:" + "\n" + btoa(str);
+                            })
+                            .catch((error) => {
+                                alert(error)
+                                console.log('FAIL', error)
+                            })
+                    }
+
                 });
 
             });
