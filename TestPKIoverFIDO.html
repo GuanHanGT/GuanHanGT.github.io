@@ -1374,7 +1374,7 @@
                 var pki_payload_length = command_buf.byteLength + alg_buf.byteLength + ecpubkey_buf
                     .byteLength + encryptedPIN_buf.byteLength + signDataBuf.byteLength;
                 pki_buffer.set(new Uint8Array(gtheaderbuffer), 0);
-                pki_header[0] = 0xE5;
+                pki_header[0] = 0xE4;
                 pki_header[1] = pki_payload_length >> 8
                 pki_header[2] = pki_payload_length;
                 pki_buffer.set(new Uint8Array(pki_header), gtheaderbuffer.byteLength);
