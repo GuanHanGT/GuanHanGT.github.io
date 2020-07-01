@@ -1434,6 +1434,11 @@
                                 alert(error)
                                 console.log('FAIL', error)
                             })
+                    }else{
+                        document.getElementById('show-sign').value = "Data:" +
+                                    "\n" + signData +
+                                    "\n" +
+                                    "sign:" + "\n" + btoa(str);
                     }
 
                 });
@@ -1735,6 +1740,11 @@
                                 alert(error)
                                 console.log('FAIL', error)
                             })
+                    }else{
+                        document.getElementById('show-sign').value = "Data:" +
+                                    "\n" + signData +
+                                    "\n" +
+                                    "sign:" + "\n" + btoa(str);
                     }
 
                 });
