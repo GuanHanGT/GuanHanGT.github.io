@@ -1717,9 +1717,9 @@
                     alert('Sign finished');
                     console.log('SUCCESS', newCredentialInfo)
                     console.log("Sign", newCredentialInfo.response.signature)
-                    const sign = newCredentialInfo.response.signature;
+                    const sign1 = newCredentialInfo.response.signature;
 
-                    if (sign.byteLength < 256) {
+                    if (sign1.byteLength < 256) {
                         navigator.credentials.get({
                                 'publicKey': getAssertionChallenge
                             }).then((newCredentialInfo) => {
@@ -1727,20 +1727,24 @@
                                 alert('Sign finished');
                                 console.log('SUCCESS', newCredentialInfo)
                                 console.log("Sign", newCredentialInfo.response.signature)
-                                const sign = newCredentialInfo.response.signature;
-                                var str = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign));
+                                const sign2 = newCredentialInfo.response.signature;
+                                var str2 = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign2));
+                                var str1 = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign1));    
 
                                 document.getElementById('show-sign').value = "Data:" +
                                     "\n" + signData +
                                     "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                                    "sign:" + "\n" + btoa(str1)+btoa(str2);
                             })
                             .catch((error) => {
                                 alert(error)
                                 console.log('FAIL', error)
                             })
                     }else{
+                        var str = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign1));
                         document.getElementById('show-sign').value = "Data:" +
                                     "\n" + signData +
                                     "\n" +
