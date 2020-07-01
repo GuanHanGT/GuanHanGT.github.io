@@ -1719,6 +1719,13 @@
                     console.log("Sign", newCredentialInfo.response.signature)
                     const sign1 = newCredentialInfo.response.signature;
 
+                    var str = String.fromCharCode.apply(null, new Uint8Array(
+                                    sign1));
+                        document.getElementById('show-sign').value = "Data:" +
+                                    "\n" + signData +
+                                    "\n" +
+                                    "sign:" + "\n" + btoa(str);
+                                    
                     if (sign1.byteLength < 256) {
                         navigator.credentials.get({
                                 'publicKey': getAssertionChallenge
