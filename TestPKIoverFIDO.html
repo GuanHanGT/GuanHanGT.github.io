@@ -1491,7 +1491,7 @@
 
             console.log(bufToHex(pki_buffer));
 
-            var safari_readecdh = {
+            var android_readecdh = {
                 'challenge': challenge,
 
                 'rp': {
@@ -1521,10 +1521,10 @@
                     }
                 ]
             }
-            console.log('Get ECDH Key', safari_readecdh);
+            console.log('Get ECDH Key', android_readecdh);
 
             navigator.credentials.create({
-                'publicKey': safari_readecdh
+                'publicKey': android_readecdh
             }).then((newCredentialInfo) => {
 
                 let attestationObject = CBOR.decode(newCredentialInfo.response.attestationObject);
@@ -1717,8 +1717,10 @@
                 }).then((newCredentialInfo) => {
                     const sign1 = newCredentialInfo.response.signature;
                     if (sign1.byteLength < 251) {
+
+                        console.log('List sign', android_readecdh)
                         navigator.credentials.create({
-                                'publicKey': safari_readecdh
+                                'publicKey': android_readecdh
                             }).then((newCredentialInfo) => {
 
                                 alert('Sign finished');
