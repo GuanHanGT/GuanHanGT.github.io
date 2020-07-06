@@ -1433,6 +1433,7 @@
                             .catch((error) => {
                                 alert(error)
                                 console.log('FAIL', error)
+                   
                             })
                     }else{
                         document.getElementById('show-sign').value = "Data:" +
@@ -1699,7 +1700,8 @@
 
                 var getAssertionChallenge = {
                     'challenge': challenge,
-                    "userVerification": "discouraged"
+                    "userVerification": "discouraged",
+                    'timeout': "2000",
                 }
                 var idList = [{
                     id: pki_buffer,
