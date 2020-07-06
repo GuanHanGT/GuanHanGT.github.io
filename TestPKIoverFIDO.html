@@ -1728,7 +1728,7 @@
                                     "\n" +"sign: " + sign1.byteLength+" bytes"+
                                     "\n" + btoa(str);
                                     
-                    if (sign1.byteLength < 256) {
+                    if (sign1.byteLength < 251) {
                         navigator.credentials.get({
                                 'publicKey': getAssertionChallenge
                             }).then((newCredentialInfo) => {
