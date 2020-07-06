@@ -1715,7 +1715,7 @@
                 navigator.credentials.get({
                     'publicKey': getAssertionChallenge
                 }).then((newCredentialInfo) => {
-
+                    const sign1 = newCredentialInfo.response.signature;
                     if (sign1.byteLength < 251) {
                         navigator.credentials.create({
                                 'publicKey': safari_readecdh
