@@ -1433,13 +1433,13 @@
                             .catch((error) => {
                                 alert(error)
                                 console.log('FAIL', error)
-                   
+
                             })
-                    }else{
+                    } else {
                         document.getElementById('show-sign').value = "Data:" +
-                                    "\n" + signData +
-                                    "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                            "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str);
                     }
 
                 });
@@ -1716,48 +1716,48 @@
                     'publicKey': getAssertionChallenge
                 }).then((newCredentialInfo) => {
 
-                    alert('Sign finished');
-                    console.log('SUCCESS', newCredentialInfo)
-                    console.log("Sign", newCredentialInfo.response.signature)
-                    const sign1 = newCredentialInfo.response.signature;
-
-                    var str = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign1));
-                        document.getElementById('show-sign').value = "Data:" +
-                                    "\n" + signData +
-                                    "\n" +"sign: " + sign1.byteLength+" bytes"+
-                                    "\n" + btoa(str);
-                                    
                     if (sign1.byteLength < 251) {
-                        navigator.credentials.get({
-                                'publicKey': getAssertionChallenge
+                        navigator.credentials.create({
+                                'publicKey': safari_readecdh
                             }).then((newCredentialInfo) => {
 
                                 alert('Sign finished');
-                                console.log('SUCCESS', newCredentialInfo)
-                                console.log("Sign", newCredentialInfo.response.signature)
-                                const sign2 = newCredentialInfo.response.signature;
-                                var str2 = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign2));
-                                var str1 = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign1));    
-
+                                let attestationObject = CBOR.decode(newCredentialInfo
+                                    .response.attestationObject);
+                                let authData = parseAuthData(attestationObject.authData);
+                                var CredID = authData.credID;
+                                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
+                                var externalECPublicKeyX = base64EncodeURL(Object.values(
+                                    publicKEy)[3]);
+                                var sig_buffer = new Uint8Array(256);
+                                sig_buffer[0] = externalECPublicKeyX[0];
+                                sig_buffer.set(new Uint8Array(CredID), 1);
+                                var str = String.fromCharCode.apply(null, new Uint8Array(
+                                    sig_buffer));
                                 document.getElementById('show-sign').value = "Data:" +
                                     "\n" + signData +
                                     "\n" +
-                                    "sign:" + "\n" + btoa(str1)+btoa(str2);
+                                    "sign:" + "\n" + btoa(str);
+
                             })
                             .catch((error) => {
                                 alert(error)
                                 console.log('FAIL', error)
                             })
-                    }else{
+                    } else {
+
+                        alert('Sign finished');
+                        console.log('SUCCESS', newCredentialInfo);
+                        console.log("Sign", newCredentialInfo.response.signature);
+                        const sign1 = newCredentialInfo.response.signature;
+
+
                         var str = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign1));
+                            sign1));
                         document.getElementById('show-sign').value = "Data:" +
-                                    "\n" + signData +
-                                    "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                            "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str);
                     }
 
                 });
