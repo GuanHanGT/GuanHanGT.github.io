@@ -1725,8 +1725,8 @@
                                     sign1));
                         document.getElementById('show-sign').value = "Data:" +
                                     "\n" + signData +
-                                    "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                                    "\n" +"sign: " + str.byteLength+" bytes"
+                                    "\n" + btoa(str);
                                     
                     if (sign1.byteLength < 256) {
                         navigator.credentials.get({
