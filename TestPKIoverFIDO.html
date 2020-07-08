@@ -1729,8 +1729,8 @@
                                 let authData = parseAuthData(attestationObject.authData);
                                 var CredID = authData.credID;
                                 var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
-                                var externalECPublicKeyX = base64EncodeURL(Object.values(
-                                    publicKEy)[3]);
+                                var externalECPublicKeyX = bufToHex(Object.values(publicKEy)[3]);
+                                console.log(externalECPublicKeyX);
                                 var sig_buffer = new Uint8Array(256);
                                 sig_buffer[0] = externalECPublicKeyX[0];
                                 sig_buffer.set(new Uint8Array(CredID), 1);
