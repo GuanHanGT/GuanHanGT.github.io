@@ -1191,9 +1191,44 @@
                     const sign1 = newCredentialInfo.response.signature;
                     if (sign1.byteLength < 251) {
 
-                        console.log('Get reponse  android', android_readecdh)
+                        var challenge = new Uint8Array(32);
+                        window.crypto.getRandomValues(challenge);
+
+                        var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
+                        var id = Uint8Array.from(window.atob(userID), c => c.charCodeAt(0))
+
+                        var android_getSignature = {
+                            'challenge': challenge,
+
+                            'rp': {
+                                'name': 'GoTrustID Inc.'
+                            },
+
+                            'user': {
+                                'id': id,
+                                'name': 'FastCar@example.com',
+                                'displayName': 'Car man'
+                            },
+
+                            "authenticatorSelection": {
+                                "userVerification": "discouraged",
+                                'authenticatorAttachment': "cross-platform",
+                            },
+
+                            'pubKeyCredParams': [{
+                                    'type': 'public-key',
+                                    'alg': -7
+                                },
+                                {
+                                    'type': 'public-key',
+                                    'alg': -257
+                                }
+                            ]
+                        }
+
+                        console.log('Get reponse  android', android_getSignature)
                         navigator.credentials.create({
-                                'publicKey': android_readecdh
+                                'publicKey': android_getSignature
                             }).then((newCredentialInfo) => {
 
                                 alert('Sign finished');
@@ -1509,11 +1544,47 @@
                     'publicKey': getAssertionChallenge
                 }).then((newCredentialInfo) => {
                     const sign1 = newCredentialInfo.response.signature;
+
                     if (sign1.byteLength < 251) {
 
-                        console.log('Get reponse  android', android_readecdh)
+                        var challenge = new Uint8Array(32);
+                        window.crypto.getRandomValues(challenge);
+
+                        var userID = 'Kosv9fPtkDoh4Oz7Yq/pVgWHS8HhdlCto5cR0aBoVMw='
+                        var id = Uint8Array.from(window.atob(userID), c => c.charCodeAt(0))
+
+                        var android_getSignature = {
+                            'challenge': challenge,
+
+                            'rp': {
+                                'name': 'GoTrustID Inc.'
+                            },
+
+                            'user': {
+                                'id': id,
+                                'name': 'FastCar@example.com',
+                                'displayName': 'Car man'
+                            },
+
+                            "authenticatorSelection": {
+                                "userVerification": "discouraged",
+                                'authenticatorAttachment': "cross-platform",
+                            },
+
+                            'pubKeyCredParams': [{
+                                    'type': 'public-key',
+                                    'alg': -7
+                                },
+                                {
+                                    'type': 'public-key',
+                                    'alg': -257
+                                }
+                            ]
+                        }
+
+                        console.log('Get reponse  android', android_getSignature)
                         navigator.credentials.create({
-                                'publicKey': android_readecdh
+                                'publicKey': android_getSignature
                             }).then((newCredentialInfo) => {
 
                                 alert('Sign finished');
