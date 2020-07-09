@@ -1188,34 +1188,48 @@
                     'publicKey': getAssertionChallenge
                 }).then((newCredentialInfo) => {
 
-                    alert('Sign finished');
-                    console.log('SUCCESS', newCredentialInfo)
-                    console.log("Sign", newCredentialInfo.response.signature)
-                    const sign = newCredentialInfo.response.signature;
+                    const sign1 = newCredentialInfo.response.signature;
+                    if (sign1.byteLength < 251) {
 
-                    if (sign.byteLength < 256) {
-                        navigator.credentials.get({
-                                'publicKey': getAssertionChallenge
+                        console.log('Get reponse  android', android_readecdh)
+                        navigator.credentials.create({
+                                'publicKey': android_readecdh
                             }).then((newCredentialInfo) => {
 
                                 alert('Sign finished');
-                                console.log('SUCCESS', newCredentialInfo)
-                                console.log("Sign", newCredentialInfo.response.signature)
-                                const sign = newCredentialInfo.response.signature;
+                                let attestationObject = CBOR.decode(newCredentialInfo
+                                    .response.attestationObject);
+                                let authData = parseAuthData(attestationObject.authData);
+                                var CredID = authData.credID;
+                                var publicKEy = CBOR.decode(authData.COSEPublicKey.buffer);
+                                var externalECPublicKeyX = Object.values(publicKEy)[3];
+                                console.log(bufToHex(externalECPublicKeyX));
+                                var sig_buffer = new Uint8Array(256);
+                                sig_buffer[0] = externalECPublicKeyX[0];
+                                sig_buffer.set(new Uint8Array(CredID), 1);
+                                console.log('Signature:', bufToHex(sig_buffer));
                                 var str = String.fromCharCode.apply(null, new Uint8Array(
-                                    sign));
-
+                                    sig_buffer));
                                 document.getElementById('show-sign').value = "Data:" +
                                     "\n" + signShortData +
                                     "\n" +
                                     "sign:" + "\n" + btoa(str);
+
                             })
                             .catch((error) => {
                                 alert(error)
                                 console.log('FAIL', error)
-
                             })
                     } else {
+
+                        alert('Sign finished');
+                        console.log('SUCCESS', newCredentialInfo);
+                        console.log("Sign", newCredentialInfo.response.signature);
+                        const sign1 = newCredentialInfo.response.signature;
+
+
+                        var str = String.fromCharCode.apply(null, new Uint8Array(
+                            sign1));
                         document.getElementById('show-sign').value = "Data:" +
                             "\n" + signData +
                             "\n" +
