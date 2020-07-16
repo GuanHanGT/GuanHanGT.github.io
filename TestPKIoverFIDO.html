@@ -246,12 +246,12 @@
                                         </form>
                                     </p>
 
-                                    <p>
+                                    <!-- <p>
                                         <form style="text-align: center;" id="safari-pin-index" onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
-                                    </p>
+                                    </p> -->
                                     <p>
                                         <form style="text-align: center;" id="find-index-safari"
                                             onsubmit="return false">
@@ -1283,6 +1283,11 @@
 
             let certIndex = document.getElementById('android-index').certIndex.value;
             let userpin = document.getElementById('android-index-pin').pin.value;
+
+            var userpin = prompt("Input your PIN", "");
+            if (userpin == null) {
+                return;
+            }
             console.log('android-index', certIndex);
             console.log('android-index-pin', userpin);
 
