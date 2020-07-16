@@ -1644,6 +1644,8 @@
             var userpin = prompt("Input your PIN", "");
             if (userpin != null) {
                 console.log('dialog_PIN', userpin);
+            }else{
+                return;
             }
 
             console.log('use-index-safari', certIndex);
