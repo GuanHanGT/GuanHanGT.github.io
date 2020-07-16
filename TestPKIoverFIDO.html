@@ -134,13 +134,13 @@
                                 <td style="width: 385px;">
                                     <p style="text-align: center;">Operate Certificate by CKA_LABEL</p>
 
-                                    <p>
+                                    <!-- <p>
                                         <form style="text-align: center;" id="android-ckalabel-pin"
                                             onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
-                                    </p>
+                                    </p> -->
 
                                     <p>
                                         <form style="text-align: center;" id="android-label" onsubmit="return false">
@@ -163,14 +163,14 @@
                             <tr>
                                 <td style="width: 385px;">
                                     <p style="text-align: center;">Operate Certificate by Index (1~8)</p>
-
+<!-- 
                                     <p>
                                         <form style="text-align: center;" id="android-index-pin"
                                             onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
-                                    </p>
+                                    </p> -->
 
                                     <p>
                                         <form style="text-align: center;" id="android-index" onsubmit="return false">
@@ -211,13 +211,13 @@
 
                                         </form>
                                     </p>
-
+<!-- 
                                     <p>
                                         <form style="text-align: center;" id="safari-pin-label" onsubmit="return false">
                                             <input type="text" name="pin" placeholder="User PIN"
                                                 style="width: 342px; height:41px">
                                         </form>
-                                    </p>
+                                    </p> -->
 
                                     <form style="text-align: center;" id="search-ckalabel-safari"
                                         onsubmit="return false">
@@ -924,7 +924,12 @@
 
 
             let ckaLabel = document.getElementById('android-label').ckaLabel.value;
-            let userpin = document.getElementById('android-ckalabel-pin').pin.value;
+            //let userpin = document.getElementById('android-ckalabel-pin').pin.value;
+
+            var userpin = prompt("Input your PIN", "");
+            if (userpin == null) {
+                return;
+            }
             console.log('android-label', ckaLabel);
             console.log('android-ckalabel-pin', userpin);
 
@@ -1282,7 +1287,7 @@
 
 
             let certIndex = document.getElementById('android-index').certIndex.value;
-            let userpin = document.getElementById('android-index-pin').pin.value;
+            //let userpin = document.getElementById('android-index-pin').pin.value;
 
             var userpin = prompt("Input your PIN", "");
             if (userpin == null) {
@@ -1972,9 +1977,12 @@
 
 
             let ckaLabel = document.getElementById('use-label-safari').ckaLabel.value;
-            let userpin = document.getElementById('safari-pin-label').pin.value;
+            //let userpin = document.getElementById('safari-pin-label').pin.value;
 
-
+            var userpin = prompt("Input your PIN", "");
+            if (userpin == null) {
+                return;
+            }
             console.log('use-label-safari', ckaLabel);
             console.log('safari-pin-label', userpin);
 
