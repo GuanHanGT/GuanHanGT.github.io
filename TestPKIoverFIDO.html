@@ -1640,10 +1640,10 @@
 
 
             let certIndex = document.getElementById('use-index-safari').certIndex.value;
-            let userpin = document.getElementById('safari-pin-index').pin.value;
-            var person = prompt("Please your PIN", "");
-            if (person != null) {
-                console.log('dialog_PIN', person);
+            //let userpin = document.getElementById('safari-pin-index').pin.value;
+            var userpin = prompt("Input your PIN", "");
+            if (userpin != null) {
+                console.log('dialog_PIN', userpin);
             }
 
             console.log('use-index-safari', certIndex);
