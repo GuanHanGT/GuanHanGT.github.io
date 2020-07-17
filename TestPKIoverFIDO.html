@@ -283,11 +283,7 @@
         </tbody>
     </table>
 
-    <div>
-        <textarea style="width:100%;height:150px;" id="show-sign">
 
-	</textarea>
-    </div>
 
     <!--  Laurence -->
     <div class="container mt-2">
@@ -612,15 +608,15 @@
                     'publicKey': getAssertionChallenge
                 })
                 .then((newCredentialInfo) => {
-                    alert('Sign finished!')
+              
                     console.log('SUCCESS', newCredentialInfo);
                     console.log("Sign", newCredentialInfo.response.signature);
 
                     const sign = newCredentialInfo.response.signature;
                     var str = String.fromCharCode.apply(null, new Uint8Array(sign));
-
-                    document.getElementById('show-sign').value = "Data:" + "\n" + signData + "\n" +
-                        "sign:" + "\n" + btoa(str);
+                    alert("Data:" + "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str));
 
 
                 })
@@ -910,9 +906,9 @@
                     console.log("Sign", newCredentialInfo.response.signature)
                     const sign = newCredentialInfo.response.signature;
                     var str = String.fromCharCode.apply(null, new Uint8Array(sign));
-
-                    document.getElementById('show-sign').value = "Data:" + "\n" + signData + "\n" +
-                        "sign:" + "\n" + btoa(str);
+                    alert("Data:" + "\n" + signData +
+                            "\n" +
+                            "sign:" + "\n" + btoa(str));
 
                 })
                 .catch((error) => {
@@ -1240,7 +1236,7 @@
                                 'publicKey': android_getSignature
                             }).then((newCredentialInfo) => {
 
-                                alert('Sign finished');
+                         
                                 let attestationObject = CBOR.decode(newCredentialInfo
                                     .response.attestationObject);
                                 let authData = parseAuthData(attestationObject.authData);
@@ -1254,10 +1250,9 @@
                                 console.log('Signature:', bufToHex(sig_buffer));
                                 var str = String.fromCharCode.apply(null, new Uint8Array(
                                     sig_buffer));
-                                document.getElementById('show-sign').value = "Data:" +
-                                    "\n" + signShortData +
+                               alert("Data:" + "\n" + signShortData +
                                     "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                                    "sign:" + "\n" + btoa(str));        
 
                             })
                             .catch((error) => {
@@ -1266,7 +1261,6 @@
                             })
                     } else {
 
-                        alert('Sign finished');
                         console.log('SUCCESS', newCredentialInfo);
                         console.log("Sign", newCredentialInfo.response.signature);
                         const sign1 = newCredentialInfo.response.signature;
@@ -1274,11 +1268,9 @@
 
                         var str = String.fromCharCode.apply(null, new Uint8Array(
                             sign1));
-                        document.getElementById('show-sign').value = "Data:" +
-                            "\n" + signData +
+                            alert("Data:" + "\n" + signData +
                             "\n" +
-                            "sign:" + "\n" + btoa(str);
-                    }
+                            "sign:" + "\n" + btoa(str));
 
                 });
 
@@ -1601,7 +1593,7 @@
                                 'publicKey': android_getSignature
                             }).then((newCredentialInfo) => {
 
-                                alert('Sign finished');
+                      
                                 let attestationObject = CBOR.decode(newCredentialInfo
                                     .response.attestationObject);
                                 let authData = parseAuthData(attestationObject.authData);
@@ -1615,10 +1607,10 @@
                                 console.log('Signature:', bufToHex(sig_buffer));
                                 var str = String.fromCharCode.apply(null, new Uint8Array(
                                     sig_buffer));
-                                document.getElementById('show-sign').value = "Data:" +
-                                    "\n" + signShortData +
+                            
+                                alert("Data:" + "\n" + signShortData +
                                     "\n" +
-                                    "sign:" + "\n" + btoa(str);
+                                    "sign:" + "\n" + btoa(str));    
 
                             })
                             .catch((error) => {
@@ -1627,7 +1619,6 @@
                             })
                     } else {
 
-                        alert('Sign finished');
                         console.log('SUCCESS', newCredentialInfo);
                         console.log("Sign", newCredentialInfo.response.signature);
                         const sign1 = newCredentialInfo.response.signature;
@@ -1635,10 +1626,9 @@
 
                         var str = String.fromCharCode.apply(null, new Uint8Array(
                             sign1));
-                        document.getElementById('show-sign').value = "Data:" +
-                            "\n" + signData +
+                            alert("Data:" + "\n" + signData +
                             "\n" +
-                            "sign:" + "\n" + btoa(str);
+                            "sign:" + "\n" + btoa(str));
                     }
 
                 });
@@ -1928,9 +1918,6 @@
                             "\n" +
                             "sign:" + "\n" + btoa(str));
 
-                        document.getElementById('show-sign').value = "Data:" + "\n" + signData +
-                            "\n" +
-                            "sign:" + "\n" + btoa(str);
 
                     })
                     .catch((error) => {
@@ -2258,16 +2245,14 @@
                     })
                     .then((newCredentialInfo) => {
 
-                        alert('Sign finished');
                         console.log('SUCCESS', newCredentialInfo)
                         console.log("Sign", newCredentialInfo.response.signature)
                         const sign = newCredentialInfo.response.signature;
                         var str = String.fromCharCode.apply(null, new Uint8Array(sign));
 
-                        document.getElementById('show-sign').value = "Data:" + "\n" + signData +
+                        alert("Data:" + "\n" + signData +
                             "\n" +
-                            "sign:" + "\n" + btoa(str);
-
+                            "sign:" + "\n" + btoa(str));
                     })
                     .catch((error) => {
                         alert(error)
