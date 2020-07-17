@@ -12,8 +12,12 @@
     <!-- Spectre.css icons are used -->
     <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
 
-    <script src="./MakeCredential Example_files/cbor.js"></script>
-    <script src="./MakeCredential Example_files/helpers.js"></script>
+
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/jqueryui/1.10.4/css/jquery-ui.min.css">
+    <script src="//apps.bdimg.com/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//apps.bdimg.com/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="jqueryui/style.css">
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -32,6 +36,9 @@
             s.parentNode.insertBefore(wf, s);
         })(document);
     </script>
+
+    <script src="./MakeCredential Example_files/cbor.js"></script>
+    <script src="./MakeCredential Example_files/helpers.js"></script>
     <script src="./library/jquery.min.js"></script>
     <script src="./library/bootstrap.min.js" integrity="sha256-Tz+u7EaSlLYQ9sqCqhzCszaP1WYRsxxVHC7iJP6ttBE="
         crossorigin="anonymous"></script>
@@ -47,6 +54,13 @@
 
 
         }
+
+        $(function() {
+            $( "#dialog" ).dialog({
+                height: 140,
+                modal: true
+            });
+        });
 
         $(document).ready(function () {
 
@@ -219,7 +233,7 @@
                                         </form>
                                     </p> -->
 
-                                    <form style="text-align: center;" id="search-ckalabel-safari"
+                                    <form style="text-align: center;" id="≈"
                                         onsubmit="return false">
                                         <button class="btn btn-primary" action="submit"
                                             style="width: 162px; height:34px;background-color: #008CBA;">Read
@@ -339,11 +353,15 @@
     </div>
 
     <script>
-        var GTheader = 'R29UcnVzdC1JZGVtLVBLSQ=='; // GoTrust-Idem-PKI
-        // 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
+        // Command Header GoTrust-Idem-PKI
+        var GTheader = 'R29UcnVzdC1JZGVtLVBLSQ=='; 
+
+        // signed Data1: 1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef  
         var signData =
             'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWYxMjM0NTY3ODkwYWJjZGVmMTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
-        //    1234567890abcdef1234567890abcdef
+        
+        
+            //  signed Data2:  1234567890abcdef1234567890abcdef
         var signShortData = 'MTIzNDU2Nzg5MGFiY2RlZjEyMzQ1Njc4OTBhYmNkZWY=';
 
 
