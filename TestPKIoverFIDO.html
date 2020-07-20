@@ -50,6 +50,12 @@
 
         var WhatSystem = navigator.userAgent;
         console.log(WhatSystem);
+        if(WhatSystem.match("Android")){
+            console.log("This is android");
+            var pctd = document.getElementById('pc-td');
+            pctd.style.visibility = 'hidden';
+        }
+
         $(document).ready(function () {
 
             var btnDecode = document.getElementById('decode');
