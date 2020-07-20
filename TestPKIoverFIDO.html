@@ -48,15 +48,34 @@
 
         }
 
-        var WhatSystem = navigator.userAgent;
-        console.log(WhatSystem);
-        if(WhatSystem.match("Android")){
-            console.log("This is android");
-            var pctd = document.getElementById('pc-td');
-            console.log(pctd);
-        }
+        
 
         $(document).ready(function () {
+
+            var pctd = document.getElementById('pc-td');
+            var androidtd = document.getElementById('android-td');
+            var safaritd = document.getElementById('safari-td');
+            var WhatSystem = navigator.userAgent;
+            console.log(WhatSystem);
+            if(WhatSystem.match("Android")){
+                console.log("This is android");
+                pctd.style.display = 'none';
+                safaritd.style.display = 'none';
+            }else if(WhatSystem.match("Windows")){
+                pctd.style.display = 'none';
+                androidtd.style.display = 'none';
+            }else if(WhatSystem.match("Safari")){
+
+                if(WhatSystem.match("Chrome")){
+                    safaritd.style.display = 'none';
+                    androidtd.style.display = 'none';
+                }else{
+                    pctd.style.display = 'none';
+                    androidtd.style.display = 'none';
+                }
+
+            }
+      
 
             var btnDecode = document.getElementById('decode');
             btnDecode.style.visibility = 'hidden';
