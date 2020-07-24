@@ -85,6 +85,8 @@
 
             var ctrlCert = document.getElementById('certificate');
             ctrlCert.style.visibility = 'hidden';
+            var formcert = document.getElementById('form');
+            formcert.style.visibility = 'hidden';
         });
     </script>
 </head>
@@ -273,7 +275,7 @@
         </tbody>
     </table>
 </div>
-<!-- 
+
 
     <div class="container mt-2">
         <div id="form" class="mt-2 mb-2">
@@ -283,7 +285,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div id="results" class="d-none mt-2"></div>
-                                <form>
+                                <form id="formcert" >
                                     <div class="form-group">
                                         <textarea class="form-control certificate" id="certificate" rows="8"
                                             style="white-space: pre" required="" autofocus=""></textarea>
@@ -309,10 +311,7 @@
                                         </div>
                                     </div>
 
-                                    <div id="cert-info-warn" class="alert alert-warning mt-3">
-                                        <small>Certificate information will never leave your browser. Decoding happens
-                                            using client-side JavaScript.</small>
-                                    </div>
+                                   
                                 </form>
 
                             </div>
@@ -321,7 +320,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div> 
 
     <script>
         // Command Header GoTrust-Idem-PKI
